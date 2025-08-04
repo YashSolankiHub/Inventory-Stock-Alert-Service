@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 class Product(Base,CommonFieldsMixin):
     __tablename__ = "products"
     sku:Mapped[str] = mapped_column(String(20), unique=True)
-    category:Mapped[str] = mapped_column(String(25))
     qty:Mapped[int] = mapped_column(Integer)
     cost:Mapped[int] = mapped_column(Integer)
     description:Mapped[str] = mapped_column(String(50))
