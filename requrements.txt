@@ -1,0 +1,12 @@
+psycopg2
+sqlalchemy
+dotenv
+alembic
+
+
+
+
+# from app import models
+# from app.db.base import Base
+# target_metadata = Base.metadata
+# sqlalchemy.url = postgresql+psycopg2://postgres:N10Yashu@localhost:5432/inventory
