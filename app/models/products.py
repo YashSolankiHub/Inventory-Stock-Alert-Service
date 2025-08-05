@@ -16,6 +16,8 @@ class Product(Base,CommonFieldsMixin):
     qty:Mapped[int] = mapped_column(Integer)
     cost:Mapped[int] = mapped_column(Integer)
     description:Mapped[str] = mapped_column(String(50))
+    brand:Mapped[str] = mapped_column(String(20))
+    brand_code:Mapped[str] = mapped_column(String(10))
     category_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('categories.id'))
 
     category:Mapped["Category"] = relationship(back_populates="products")

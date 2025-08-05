@@ -2,7 +2,7 @@ from app.exceptions.base import *
 from app.schemas.general_response import *
 
 
-class DataBaseError(AppException):
+class DataBaseError(APIException):
     def __init__(self, e):
         detail = ErrorDetail(
                 code="DB_ERROR",

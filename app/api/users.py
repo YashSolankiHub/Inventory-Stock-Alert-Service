@@ -31,36 +31,10 @@ class UsersRoutes():
         
 
         Returns:
-            APIRouter: Configured router with auth routes.
+            APIRouter: Configured router with user routes.
         """    
 
-        router = APIRouter(prefix="", tags=["auth"])
-
-        # @router.get("",response_model= StandardResponse[List[UserResponseSchema]])
-        # def list_students(
-        #     search:Optional[str] = Query(None),
-        #     filters: Optional[str] = Query(None, description="e.g. name,like,John"),
-        #     page: int = 1,
-        #     limit: int = 5, db:Session = Depends(get_db)
-        # ):
-        #     pass
-
-
-            # #list all students with filter query parameter search, filter, page, limit 
-            
-
-            # logger.info(f"GET :- students list endpoint called")
-            # logger.debug(f"Filters: search={search}, filters={filters}, page={page}, limit={limit}")
-            # service = UserService(db)
-            # allowed_fields = ["name", "username", "email", "mobile"]
-            # students = service.list_users("student",search,filters,page, limit,allowed_fields)
-            # students.msg = "Students fetch sucessfully"
-            # return students
-            # return StandardResponse(
-            #     success=True,
-            #     data=students,
-            #     msg="Students fetch successfully"
-            # )
+        router = APIRouter(prefix="", tags=["user"])
 
         @router.get("/")
         @required_roles([UserRoles.WAREHOUSE_MANAGER, UserRoles.ADMIN])

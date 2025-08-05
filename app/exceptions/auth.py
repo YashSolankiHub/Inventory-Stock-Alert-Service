@@ -1,6 +1,6 @@
 from app.exceptions.base import *
 
-class AuthExceptions(AppException):
+class AuthExceptions(APIException):
     ...
 
 class AlreadyRegistered(AuthExceptions):

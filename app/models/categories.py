@@ -11,4 +11,5 @@ if TYPE_CHECKING:
 class Category(Base,CommonFieldsMixin):
     __tablename__ = "categories"
     name:Mapped[str] = mapped_column(String(20), unique=True)
+    cat_code:Mapped[str] = mapped_column(String(10), unique=True)
     products:Mapped[List["Product"]] = relationship(back_populates="category")
