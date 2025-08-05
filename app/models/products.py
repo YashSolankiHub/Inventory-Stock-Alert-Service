@@ -3,7 +3,6 @@ from sqlalchemy import  String, BIGINT,Integer,ForeignKey
 from app.db.base import Base
 from app.models.common_fields import CommonFieldsMixin
 from typing import List, TYPE_CHECKING
-from app.models.products_categories import products_categories
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -19,7 +18,7 @@ class Product(Base,CommonFieldsMixin):
     description:Mapped[str] = mapped_column(String(50))
     category_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('categories.id'))
 
-    categories:Mapped[List["Category"]] = relationship(secondary=products_categories, back_populates="products")
+    category:Mapped["Category"] = relationship(back_populates="products")
 
 
 

@@ -2,6 +2,9 @@ psycopg2
 sqlalchemy
 dotenv
 alembic
+fastapi[standard]
+passlib[bycript]
+pyjwt
 
 
 

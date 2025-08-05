@@ -1,55 +1,49 @@
-from app.models.base import *
-from app.db.database import db, engine
-from app.db.base import Base
-from app.enums.enums import PurchaseOrderStatus
+from fastapi import FastAPI, Request
+from app.api.auth import AuthRoutes
+from fastapi.responses import JSONResponse
+from fastapi.openapi.utils import get_openapi
+from app.exceptions.base import AppException
+
+
+app = FastAPI(title="Online Learning Platform")
+
+app.include_router(AuthRoutes.get_router(),prefix="/auth")
 
 
 
-# s1 = Supplier(
-#     name= "Yash Solanki",
-#     email ="ys6244864@gami.com",
-#     mobile = 8734821090,
-#     lead_time_days = 8
-
-# )
-
-
-# db.add(s1)
-# db.commit()
+@app.exception_handler(AppException)
+async def app_exception_handler(request:Request, exc:AppException):
+    return JSONResponse(
+        status_code= exc.status_code,
+        content= {
+            "sucsess":False,
+            "error":exc.detail
+        }
+    )
 
 
-# c1 =Category(
-#     name="Electronics"
-# )
+# Add Bearer token support in Swagger UI
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="FastAPI with Bearer Auth",
+        version="1.0.0",
+        description="Paste JWT token using Bearer scheme",
+        routes=app.routes,
+    )
+    openapi_schema["components"]["securitySchemes"] = {
+        "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+    for path in openapi_schema["paths"].values():
+        for method in path.values():
+            method["security"] = [{"BearerAuth": []}]
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
 
-# db.add(c1)
-# db.commit()
+app.openapi = custom_openapi
 
-# p1 = Product(
-#     sku ="ABC",
-#     qty= 5,
-#     cost= 100,
-#     description = "Hello",
-#     category_id= "daf0bf42-435a-43d7-be35-451639cf6b63"
-
-# )
-
-# db.add(p1)
-# db.commit()
-
-
-po1 = PurchaseOrder(
-    product_id = "4a787dda-9aa8-42e3-9828-9236474ba72e",
-    qty =10,
-    unit_cost = 1500,
-    total_cost = 15000,
-    lead_time_days = 8,
-    status = "draft",
-    supplier_id = "d9ef4a25-1c30-46a6-b7be-ec43ed7eecb4"
-)
-
-db.add(po1)
-db.commit()
-
-
-# Base.metadata.drop_all(engine)

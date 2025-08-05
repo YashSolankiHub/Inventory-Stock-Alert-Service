@@ -5,4 +5,9 @@ class PurchaseOrderStatus(Enum):
     ORDERD = "ordered"
     RECEIVED = "received"
 
+
+class UserRoles(Enum):
+    ADMIN = "admin"
+    WAREHOUSE_MANAGER = "warehouse_manager"
+    CLERK = "clerk"
     

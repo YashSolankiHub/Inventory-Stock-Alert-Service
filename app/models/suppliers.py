@@ -3,7 +3,7 @@ from sqlalchemy import  String, BIGINT,Integer,ForeignKey
 from app.db.base import Base
 from app.models.common_fields import CommonFieldsMixin
 from typing import List, TYPE_CHECKING
-from app.models.products_categories import products_categories
+
 
 if TYPE_CHECKING:
     from app.models.purchase_orders import PurchaseOrder

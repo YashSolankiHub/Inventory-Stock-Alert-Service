@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import  String, BIGINT
+from sqlalchemy import  String, BIGINT,Enum as SQlEnum
 from app.db.base import Base
 from app.models.common_fields import CommonFieldsMixin
 from typing import List, TYPE_CHECKING
+from app.enums.enums import UserRoles
+
 
 # if TYPE_CHECKING:
 #     from app.models.enrollment import Enrollment
@@ -16,10 +18,10 @@ class User(Base,CommonFieldsMixin):
     email:Mapped[str] = mapped_column(String(50),unique=True)
     mobile:Mapped[BIGINT] = mapped_column(BIGINT, unique=True)
     password:Mapped[str] = mapped_column(String(255))
-    role:Mapped[str] = mapped_column(String(15))    
+    role:Mapped[UserRoles] = mapped_column(SQlEnum(UserRoles))
 
 
-    
+
 
 
 

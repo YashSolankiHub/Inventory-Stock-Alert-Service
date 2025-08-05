@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import  String, BIGINT,Integer,ForeignKey
+from sqlalchemy import  String, BIGINT,Integer,ForeignKey,Enum as SQLEnum
 from app.db.base import Base
 from app.models.common_fields import CommonFieldsMixin
 from typing import List, TYPE_CHECKING
-from sqlalchemy import Enum as SQLEnum
 from app.enums.enums import PurchaseOrderStatus
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
