@@ -18,10 +18,11 @@ class TokenService:
                 to_encode[k] = v.value
             else:
                 to_encode[k] = v
+
         if expire_delta:
             expire = datetime.now(timezone.utc) + expire_delta
         else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=2) 
+            expire = datetime.now(timezone.utc) + timedelta(minutes=20) 
     
         to_encode.update({"exp":expire, "type": token_type })
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm= ALGORITHM)

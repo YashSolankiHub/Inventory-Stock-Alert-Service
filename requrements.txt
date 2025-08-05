@@ -5,7 +5,7 @@ alembic
 fastapi[standard]
 passlib[bycript]
 pyjwt
-
+jose
 
 
 

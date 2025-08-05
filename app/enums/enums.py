@@ -6,8 +6,8 @@ class PurchaseOrderStatus(Enum):
     RECEIVED = "received"
 
 
-class UserRoles(Enum):
-    ADMIN = "admin"
-    WAREHOUSE_MANAGER = "warehouse_manager"
-    CLERK = "clerk"
+class UserRoles(str,Enum):
+    ADMIN = "ADMIN"
+    WAREHOUSE_MANAGER = "WAREHOUSE_MANAGER"
+    CLERK = "CLERK"
     
