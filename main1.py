@@ -50,6 +50,27 @@ from app.enums.enums import PurchaseOrderStatus
 
 # db.add(po1)
 # db.commit()
+from uuid import UUID
 
 
-Base.metadata.drop_all(engine)
+# p1 = Product(
+#     sku="ELEC-IPH-001",
+#     name="iPhone 15 Pro",
+#     description="Apple iPhone 15 Pro 128GB",
+#     qty=0, 
+#     cost=120000, 
+#     model="A2849",
+#     brand="Apple",
+#     category_id="f19960a9-cbcc-403d-b15a-a5066a812e7c"  # Example UUID of Category
+# )
+
+# db.add(p1)
+# db.commit()
+# Base.metadata.drop_all(engine)
+
+
+
+
+
+
+

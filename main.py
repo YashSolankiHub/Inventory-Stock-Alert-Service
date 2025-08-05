@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from app.api.auth import AuthRoutes
 from app.api.users import UsersRoutes
 from app.api.category import CategoryRoutes
+from app.api.product import ProductRoutes
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 from app.exceptions.base import APIException
@@ -12,6 +13,7 @@ app = FastAPI(title="Online Learning Platform")
 app.include_router(AuthRoutes.get_router(),prefix="/auth")
 app.include_router(UsersRoutes.get_router(),prefix="/users")
 app.include_router(CategoryRoutes.get_router(),prefix="")
+app.include_router(ProductRoutes.get_router(),prefix="")
 
 
 

@@ -13,15 +13,12 @@ if TYPE_CHECKING:
 class Product(Base,CommonFieldsMixin):
     __tablename__ = "products"
     sku:Mapped[str] = mapped_column(String(20), unique=True)
-    qty:Mapped[int] = mapped_column(Integer)
-    cost:Mapped[int] = mapped_column(Integer)
+    name:Mapped[str] = mapped_column(String(30))
     description:Mapped[str] = mapped_column(String(50))
+    qty:Mapped[int] = mapped_column(Integer, default=0)
+    cost:Mapped[int] = mapped_column(Integer)
+    model:Mapped[str] = mapped_column(String(20), nullable=True)
     brand:Mapped[str] = mapped_column(String(20))
-    brand_code:Mapped[str] = mapped_column(String(10))
     category_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('categories.id'))
-
     category:Mapped["Category"] = relationship(back_populates="products")
-
-
-
 

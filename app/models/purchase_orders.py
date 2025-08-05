@@ -18,7 +18,6 @@ class PurchaseOrder(Base,CommonFieldsMixin):
     unit_cost:Mapped[int] = mapped_column(Integer)
     total_cost:Mapped[int] = mapped_column(Integer)
     #remaining thing:- expected_date:Mapped 
-    lead_time_days:Mapped[int] = mapped_column(Integer)
     status:Mapped[PurchaseOrderStatus] = mapped_column(SQLEnum(PurchaseOrderStatus), default= PurchaseOrderStatus.DRAFT)
     supplier_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('suppliers.id'))
     supplier: Mapped["Supplier"] = relationship(back_populates="pos")
