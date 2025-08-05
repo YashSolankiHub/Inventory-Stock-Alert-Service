@@ -40,7 +40,7 @@ class CategoryService(CommonService):
         #check category is exists
         if is_cat_exists:
             logger.warning(f"Category {pydantic_data['name']} already exists!")
-            raise AlreadyExistsException("Cate gory already exists!")
+            raise AlreadyExistsException("Category already exists!")
         
         logger.info(f"Adding new course: {pydantic_data}")
         category = self.create_record(pydantic_data)
