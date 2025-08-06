@@ -51,7 +51,8 @@ class POService(CommonService):
         lead_time_days = supplier.lead_time_days
         logger.info(f"supplier's lead time days: {lead_time_days}")
 
-        pydantic_data["expected_date"] = datetime.now(timezone.utc) + timedelta(days=lead_time_days) 
+        #add lead days to the current data for getting expected date
+        pydantic_data["expected_date"] = datetime.now(timezone.utc) + timedelta(days=lead_time_days)    
         logger.info(f"expected date set to {datetime.now(timezone.utc) + timedelta(days=lead_time_days)}")
 
         purchase_order = self.create_record(pydantic_data)
@@ -61,6 +62,45 @@ class POService(CommonService):
         purchase_order_data['expected_date'] = str(purchase_order_data['expected_date'])[:10]
 
         return purchase_order_data
+    
+    def update_po_status(self,id, py_model:BaseModel):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"updating po with status: {pydantic_data}")
+
+        purchase_order_record = self.get_record_by_id(id)
+
+        #check purchase order record exists or not with id
+        if not purchase_order_record:
+            logger.warning(f"Purchase Order with id {id} not exists")
+            raise NotFoundException(f"Purchase Order with id {id} not exists")
+        elif purchase_order_record.status == PurchaseOrderStatus.ORDERD:
+            logger.warning(f"Purchase Order with id {id} already ordered")
+            raise AlreadyExistsException(f"Purchase Order with id {id} already ordered")
+        elif purchase_order_record.status == PurchaseOrderStatus.RECEIVED:
+            logger.warning(f"Purchase Order with id {id} already received")
+            raise AlreadyExistsException(f"Purchase Order with id {id} already received")
+        
+        status_updated_po = self.update_record_by_id(id, py_model)
+        logger.info(f"po status updated: {status_updated_po}")
+        return status_updated_po
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
 
 
 

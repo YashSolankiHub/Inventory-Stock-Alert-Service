@@ -1,9 +1,9 @@
 from enum import Enum
 
-class PurchaseOrderStatus(Enum):
-    DRAFT = "draft"
-    ORDERD = "ordered"
-    RECEIVED = "received"
+class PurchaseOrderStatus(str,Enum):
+    DRAFT = "DRAFT"
+    ORDERD = "ORDERED"
+    RECEIVED = "RECEIVED"
 
 
 class UserRoles(str,Enum):

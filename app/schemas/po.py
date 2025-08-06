@@ -5,6 +5,8 @@ from uuid import UUID
 from typing import List
 from app.schemas.po_items import POItemResponseSchema
 from datetime import datetime
+from app.enums.enums import PurchaseOrderStatus
+from enum import Enum
 
 
 class POCreateSchema(BaseModel):
@@ -23,3 +25,22 @@ class POResponseSchema(BaseModel):
     class Config:
         from_attributes = True
         arbitrary_types_allowed=True
+
+
+class POStatusUpdateSchema(BaseModel):
+    status: PurchaseOrderStatus
+    
+
+class POStatusUpdateResponseSchema(BaseModel):
+    id:UUID
+    total_po_cost:int 
+    status: PurchaseOrderStatus
+    expected_date:datetime.date
+    supplier_id:UUID
+
+    class Config:
+        from_attributes = True
+        arbitrary_types_allowed=True
+
+
+

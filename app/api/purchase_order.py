@@ -66,6 +66,25 @@ class PORoutes():
                 data = purchase_order,
                 msg="Purchase Order created",
             )
+        
+        @router.patch("/{id}/status", response_model= StandardResponse[POStatusUpdateResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def update_po_status(id:UUID,PurchaseOrderStatus:POStatusUpdateSchema , request:Request, db:Session = Depends(get_db)):
+            """create Purchase order  with supplier id 
+
+            args: 
+                PurchaseOrderStatus: pydantic model
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"POST :- /Purchase_orders/{id}/status endpoint called for updating Purchase Order status")
+            service = POService(db)
+            status_updated_purchase_order = service.update_po_status(id, PurchaseOrderStatus)
+            return StandardResponse(
+                success=True,
+                data = status_updated_purchase_order,
+                msg="Purchase Order status updated",
+            )
         return router
 
 
