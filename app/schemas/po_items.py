@@ -21,6 +21,7 @@ class POItemResponseSchema(BaseModel):
     sku:str = Field(...,min_length=2)
     qty:int = Field(..., gt=0)
     unit_cost:int = Field(..., gt=0)
+    total_cost:int = Field(...,gt=0)
     po_id:UUID= Field(...)
 
 

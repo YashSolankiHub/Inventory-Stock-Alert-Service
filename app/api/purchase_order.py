@@ -61,16 +61,9 @@ class PORoutes():
             logger.info(f"POST :- /Purchase_orders endpoint called for creating Purchase Order")
             service = POService(db)
             purchase_order = service.create_purchase_order(PurchaseOrder)
-            purchase_order_py_obj = POResponseSchema.model_validate(purchase_order)
-            purchase_order_data = purchase_order_py_obj.model_dump()
-
-            purchase_order_data['expected_date'] = str(purchase_order_data['expected_date'])[:10]
-            
-
-
             return StandardResponse(
                 success=True,
-                data = purchase_order_data,
+                data = purchase_order,
                 msg="Purchase Order created",
             )
         return router

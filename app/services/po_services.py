@@ -23,6 +23,7 @@ from app.utils.helper import generate_sku
 from app.models.purchase_orders import PurchaseOrder as PurchaseOrderModel
 from app.models.suppliers import Supplier as SupplierModel
 from datetime import datetime, timedelta
+from app.schemas.po import *
 
 
 
@@ -55,8 +56,11 @@ class POService(CommonService):
 
         purchase_order = self.create_record(pydantic_data)
         logger.info(f"Adding purchase order {pydantic_data}")
+        purchase_order_py_obj = POResponseSchema.model_validate(purchase_order)
+        purchase_order_data = purchase_order_py_obj.model_dump()
+        purchase_order_data['expected_date'] = str(purchase_order_data['expected_date'])[:10]
 
-        return purchase_order
+        return purchase_order_data
 
 
 

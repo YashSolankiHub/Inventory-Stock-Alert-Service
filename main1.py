@@ -2,6 +2,7 @@ from app.models.base import *
 from app.db.database import db, engine
 from app.db.base import Base
 from app.enums.enums import PurchaseOrderStatus
+from app.schemas.po_items import *
 
 
 
@@ -18,23 +19,23 @@ from app.enums.enums import PurchaseOrderStatus
 # db.commit()
 
 
-c2 =Category(
-    name="Fridge"
-)
-c3 =Category(
-    name="Laptop"
-)
-c4 =Category(
-    name="Soap"
-)
-c5 =Category(
-    name="Kitchen"
-)
+# c2 =Category(
+#     name="Fridge"
+# )
+# c3 =Category(
+#     name="Laptop"
+# )
+# c4 =Category(
+#     name="Soap"
+# )
+# c5 =Category(
+#     name="Kitchen"
+# )
 
 
 
-db.add_all([c2,c3,c4,c5])
-db.commit()
+# db.add_all([c2,c3,c4,c5])
+# db.commit()
 
 # p1 = Product(
 #     sku ="ABC",
@@ -85,3 +86,15 @@ from uuid import UUID
 
 
 
+# obj = POItemResponseSchema(
+#     id= "7a142b7a-db2a-477f-8f8b-7a3c466977da",
+#     sku= "ex-101",
+#     qty=10,
+#     unit_cost=1200,
+#     po_id="7a142b7a-db2a-477f-8f8b-7a3c466977da"
+# )
+
+# data = obj.model_dump()
+# print(data)
+# print(data['unit_cost'])
+# print(type(data['unit_cost']))

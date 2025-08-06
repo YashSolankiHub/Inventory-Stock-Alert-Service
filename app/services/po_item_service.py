@@ -24,6 +24,10 @@ from app.models.purchase_orders import PurchaseOrder as PurchaseOrderModel
 from app.models.suppliers import Supplier as SupplierModel
 from datetime import datetime, timedelta
 from app.models.purchase_order_items import POItem as POItemModel
+from app.schemas.po_items import *
+from app.exceptions.database import *
+
+
 
 
 
@@ -57,6 +61,19 @@ class POItemService(CommonService):
         
         logger.info(f"Adding new po item : {pydantic_data}")
         po_item = self.create_record(pydantic_data)
+
+        po_item_py_obj = POItemResponseSchema.model_validate(po_item)
+        po_item_data = po_item_py_obj.model_dump()
+
+        logger.info(f"dump data: {po_item_data}")
+
+        purchase_order_record.total_po_cost = purchase_order_record.total_po_cost + po_item_data['total_cost']
+        try:
+            self.db.commit()
+        except SQLAlchemyError as e:
+            self.db.rollback()
+            raise DataError(e)
+
         return po_item
 
         
