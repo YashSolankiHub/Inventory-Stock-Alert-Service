@@ -1,0 +1,180 @@
+
+# from app import models
+# from app.db.base import Base
+# target_metadata = Base.metadata
+# sqlalchemy.url = postgresql+psycopg2://postgres:N10Yashu@localhost:5432/inventory
+
+# {
+#   "username": "gopi.solanki",
+#   "name": "Gopi Solanki",
+#   "email": "gopi@example.com",
+#   "mobile": 9876543210,
+#   "password": "india@123"
+# }
+
+
+
+[
+    {
+        "name": "iPhone 15",
+        "description": "Latest Apple smartphone",
+        "cost": 80000,
+        "model": "A2890",
+        "brand": "Apple",
+        "category_id": "f19960a9-cbcc-403d-b15a-a5066a812e7c"
+    },
+    {
+        "name": "Samsung Galaxy S24",
+        "description": "Flagship Samsung smartphone",
+        "cost": 75000,
+        "model": "SM-S921B",
+        "brand": "Samsung",
+        "category_id": "f19960a9-cbcc-403d-b15a-a5066a812e7c"
+    },
+    {
+        "name": "LG Refrigerator",
+        "description": "Double door fridge",
+        "cost": 55000,
+        "model": "GL-T402",
+        "brand": "LG",
+        "category_id": "d5c4356f-f473-4ea3-b5b8-891b3642e702"
+    },
+    {
+        "name": "Whirlpool Fridge",
+        "description": "Frost free refrigerator",
+        "cost": 40000,
+        "model": "IF278",
+        "brand": "Whirlpool",
+        "category_id": "d5c4356f-f473-4ea3-b5b8-891b3642e702"
+    },
+    {
+        "name": "Dell XPS 13",
+        "description": "Ultrabook with Intel i7",
+        "cost": 120000,
+        "model": "9315",
+        "brand": "Dell",
+        "category_id": "2d630b54-cda9-4015-b1c5-e47904a3b8ad"
+    },
+    {
+        "name": "HP Spectre x360",
+        "description": "Convertible laptop",
+        "cost": 110000,
+        "model": "14-ef2035",
+        "brand": "HP",
+        "category_id": "2d630b54-cda9-4015-b1c5-e47904a3b8ad"
+    },
+    {
+        "name": "Dove Soap",
+        "description": "Moisturizing beauty bar",
+        "cost": 60,
+        "model": null,
+        "brand": "Dove",
+        "category_id": "48751d51-5375-4bae-9319-196ae55ebe7e"
+    },
+    {
+        "name": "Lux Soap",
+        "description": "Fragrant soap bar",
+        "cost": 45,
+        "model": null,
+        "brand": "Lux",
+        "category_id": "48751d51-5375-4bae-9319-196ae55ebe7e"
+    },
+    {
+        "name": "Prestige Gas Stove",
+        "description": "4 burner glass top stove",
+        "cost": 7000,
+        "model": "GT04L",
+        "brand": "Prestige",
+        "category_id": "b00b112c-658b-4eb0-91f9-8fc8152cbccd"
+    },
+    {
+        "name": "Philips Mixer Grinder",
+        "description": "750W powerful mixer",
+        "cost": 4500,
+        "model": "HL7756",
+        "brand": "Philips",
+        "category_id": "b00b112c-658b-4eb0-91f9-8fc8152cbccd"
+    },
+    {
+        "name": "Sony Xperia 1 V",
+        "description": "Sony's flagship smartphone",
+        "cost": 90000,
+        "model": "XQ-DQ72",
+        "brand": "Sony",
+        "category_id": "f19960a9-cbcc-403d-b15a-a5066a812e7c"
+    },
+    {
+        "name": "Godrej Refrigerator",
+        "description": "Eco-friendly fridge",
+        "cost": 38000,
+        "model": "RT EON",
+        "brand": "Godrej",
+        "category_id": "d5c4356f-f473-4ea3-b5b8-891b3642e702"
+    },
+    {
+        "name": "Lenovo ThinkPad X1",
+        "description": "Business laptop",
+        "cost": 130000,
+        "model": "Gen 11",
+        "brand": "Lenovo",
+        "category_id": "2d630b54-cda9-4015-b1c5-e47904a3b8ad"
+    },
+    {
+        "name": "Pears Soap",
+        "description": "Pure and gentle soap",
+        "cost": 50,
+        "model": null,
+        "brand": "Pears",
+        "category_id": "48751d51-5375-4bae-9319-196ae55ebe7e"
+    },
+    {
+        "name": "Butterfly Gas Stove",
+        "description": "2 burner compact stove",
+        "cost": 3500,
+        "model": "Smart Glass",
+        "brand": "Butterfly",
+        "category_id": "b00b112c-658b-4eb0-91f9-8fc8152cbccd"
+    },
+    {
+        "name": "OnePlus 12",
+        "description": "Premium OnePlus smartphone",
+        "cost": 65000,
+        "model": "CPH2581",
+        "brand": "OnePlus",
+        "category_id": "f19960a9-cbcc-403d-b15a-a5066a812e7c"
+    },
+    {
+        "name": "Samsung Fridge",
+        "description": "Smart inverter refrigerator",
+        "cost": 60000,
+        "model": "RT42",
+        "brand": "Samsung",
+        "category_id": "d5c4356f-f473-4ea3-b5b8-891b3642e702"
+    },
+    {
+        "name": "Asus ROG Zephyrus",
+        "description": "Gaming laptop",
+        "cost": 180000,
+        "model": "G14",
+        "brand": "Asus",
+        "category_id": "2d630b54-cda9-4015-b1c5-e47904a3b8ad"
+    },
+    {
+        "name": "Liril Soap",
+        "description": "Fresh lemon soap",
+        "cost": 40,
+        "model": null,
+        "brand": "Liril",
+        "category_id": "48751d51-5375-4bae-9319-196ae55ebe7e"
+    },
+    {
+        "name": "Bajaj Mixer Grinder",
+        "description": "500W compact mixer",
+        "cost": 3000,
+        "model": "Rex 500",
+        "brand": "Bajaj",
+        "category_id": "b00b112c-658b-4eb0-91f9-8fc8152cbccd"
+    }
+]
+
+

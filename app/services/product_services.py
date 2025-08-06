@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from app.utils.logging import LoggingService
 from typing import TYPE_CHECKING
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import DataError
 from app.exceptions.database import *
 from app.exceptions.auth import *
 from app.exceptions.common import *
@@ -37,20 +38,23 @@ class ProductService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating product with data: {pydantic_data}")
 
-        is_product_exists = self.db.query(CategoryModel).filter(func.lower(CategoryModel.name)  == func.lower(pydantic_data["name"])).first()
+        is_product_exists = self.db.query(CategoryModel).filter(func.lower(ProductModel.name)  == func.lower(pydantic_data["name"])).first()
 
         #check category is exists
         if is_product_exists:
             logger.warning(f"Product {pydantic_data['name']} already exists!")
             raise AlreadyExistsException("Product already exists!")
         
+
         is_cat_id_exist = self.db.query(CategoryModel).filter_by(id = pydantic_data['category_id']).first()
+
 
         if not is_cat_id_exist:
             logger.warning(f"Category with id {pydantic_data['category_id']} not found!")
             raise NotFoundException(f"Category with id {pydantic_data['category_id']} not found!")
         
         category_name  = is_cat_id_exist.name
+        logger.info(f"Category Name {category_name}")
 
         SKU = generate_sku(
             category_name,
@@ -58,6 +62,8 @@ class ProductService(CommonService):
             pydantic_data['name'],
             pydantic_data.get('model',None)
         )
+
+        logger.info(f"Sku generated : {SKU}")
 
         pydantic_data["sku"] = SKU        
         logger.info(f"Adding new product: {pydantic_data}")

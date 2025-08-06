@@ -10,3 +10,4 @@ class DataBaseError(APIException):
             code="DB_ERROR",
             msg=f"Data base error: {str(e)}"
         )
+

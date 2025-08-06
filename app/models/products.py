@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class Product(Base,CommonFieldsMixin):
     __tablename__ = "products"
-    sku:Mapped[str] = mapped_column(String(20), unique=True)
+    sku:Mapped[str] = mapped_column(String(50))
     name:Mapped[str] = mapped_column(String(30))
     description:Mapped[str] = mapped_column(String(50))
     qty:Mapped[int] = mapped_column(Integer, default=0)

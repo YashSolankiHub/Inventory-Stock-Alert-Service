@@ -43,12 +43,12 @@ class ProductRoutes():
 
         @router.post("/products", response_model= StandardResponse[ProductResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def create_product(product:ProductCretaeSchema , request:Request, db:Session = Depends(get_db)):
+        async def create_product(product:ProductCreateSchema , request:Request, db:Session = Depends(get_db)):
             """create product  with data of name, qty, cost,description, category_id,model, brand etc
 
             args: 
                 product: pydantic model
-                db: session varibale for interactin database
+                db: session varibale for interactios with database
 
             """
             logger.info(f"POST :- /products endpoint called for creating product")

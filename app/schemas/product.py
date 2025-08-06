@@ -3,24 +3,22 @@ from uuid import UUID
 from typing import Optional
 from app.schemas.categories import CategoryResponseSchema
 
-class ProductCretaeSchema(BaseModel):
+class ProductCreateSchema(BaseModel):
     name:str = Field(...,min_length=2)
     description:str = Field(...,min_length=4)
     cost:int = Field(...,gt=0)
     model:Optional[str] = None
     brand:str = Field(..., min_length=2)
-    category_id:str = Field(...)
-
-
-
+    category_id:UUID = Field(...)
 
 
 
 
 class ProductResponseSchema(BaseModel):
     id:UUID
+    sku:str
     name:str
-    model:str
+    model:Optional[str] = None
     brand:str
     category:CategoryResponseSchema
 

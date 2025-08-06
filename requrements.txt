@@ -8,16 +8,3 @@ pyjwt
 jose
 
 
-
-# from app import models
-# from app.db.base import Base
-# target_metadata = Base.metadata
-# sqlalchemy.url = postgresql+psycopg2://postgres:N10Yashu@localhost:5432/inventory
-
-# {
-#   "username": "gopi.solanki",
-#   "name": "Gopi Solanki",
-#   "email": "gopi@example.com",
-#   "mobile": 9876543210,
-#   "password": "india@123"
-# }

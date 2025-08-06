@@ -18,12 +18,23 @@ from app.enums.enums import PurchaseOrderStatus
 # db.commit()
 
 
-# c1 =Category(
-#     name="Electronics"
-# )
+c2 =Category(
+    name="Fridge"
+)
+c3 =Category(
+    name="Laptop"
+)
+c4 =Category(
+    name="Soap"
+)
+c5 =Category(
+    name="Kitchen"
+)
 
-# db.add(c1)
-# db.commit()
+
+
+db.add_all([c2,c3,c4,c5])
+db.commit()
 
 # p1 = Product(
 #     sku ="ABC",
