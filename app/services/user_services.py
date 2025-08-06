@@ -4,7 +4,7 @@ from app.utils.validators import PwdContext
 from fastapi import HTTPException, status, UploadFile
 from sqlalchemy import and_, or_
 from app.services.common_service import CommonService
-from app.services.filter_service import FilterService
+# from app.services.filter_service import FilterService
 
 from app.models.users import User as UserModel
 

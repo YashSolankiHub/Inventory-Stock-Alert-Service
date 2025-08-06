@@ -38,9 +38,10 @@ class ProductService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating product with data: {pydantic_data}")
 
-        is_product_exists = self.db.query(CategoryModel).filter(func.lower(ProductModel.name)  == func.lower(pydantic_data["name"])).first()
 
-        #check category is exists
+        is_product_exists = self.db.query(ProductModel).filter(func.lower(ProductModel.name)  == func.lower(pydantic_data["name"])).first()
+
+        #check product is exists or not
         if is_product_exists:
             logger.warning(f"Product {pydantic_data['name']} already exists!")
             raise AlreadyExistsException("Product already exists!")
@@ -48,7 +49,7 @@ class ProductService(CommonService):
 
         is_cat_id_exist = self.db.query(CategoryModel).filter_by(id = pydantic_data['category_id']).first()
 
-
+        #check category id is exists or notss
         if not is_cat_id_exist:
             logger.warning(f"Category with id {pydantic_data['category_id']} not found!")
             raise NotFoundException(f"Category with id {pydantic_data['category_id']} not found!")

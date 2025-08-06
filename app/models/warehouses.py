@@ -12,9 +12,8 @@ if TYPE_CHECKING:
 class Warehouse(Base,CommonFieldsMixin):
     __tablename__ = "warehouses"
     name:Mapped[str] = mapped_column(String(25))
-    qty:Mapped[int] = mapped_column(Integer)
     address:Mapped[str] = mapped_column(String(100))
-    capacity:Mapped[int] = mapped_column(Integer)   
+    capacity_in_sqft:Mapped[int] = mapped_column(Integer)   
     warehouse_manager_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'))
     bins:Mapped[List["Bin"]] = relationship(back_populates="warehouse")
 

@@ -63,6 +63,7 @@ class AuthServices(CommonService):
         logger.debug(f"Creating user with email: {pydantic_data['email']}, username: {pydantic_data['username']}, mobile: {pydantic_data['mobile']}")
         pydantic_data["role"] = role
 
+        #check if user exists or not for field email, username , mobile
         is_user_exists = self.db.query(UserModel).filter(or_(
                 UserModel.email == pydantic_data["email"],
                 UserModel.username == pydantic_data["username"],
@@ -73,6 +74,7 @@ class AuthServices(CommonService):
             logger.warning(f"User already exists with same email/username/mobile")
             raise AlreadyRegistered()
         
+        #create hashed password
         hashed_password = self.pwd_context.get_hash_password(pydantic_data['password'])
         pydantic_data['password'] = hashed_password
 

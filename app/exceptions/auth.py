@@ -6,11 +6,11 @@ class AuthExceptions(APIException):
 
 
 class AlreadyRegistered(AuthExceptions):
-    def __init__(self):
+    def __init__(self, msg ="Email or username or mobile number is already registered!" ):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
             code="ALREADY_REGISTERED",
-            msg="Email or username or mobile number is already registered!"
+            msg=msg
         )
 
 
