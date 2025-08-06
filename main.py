@@ -5,6 +5,7 @@ from app.api.category import CategoryRoutes
 from app.api.product import ProductRoutes
 from app.api.warehouse import WarehouseRoutes
 from app.api.supplier import SupplierRoutes
+from app.api.purchase_order import PORoutes
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 from app.exceptions.base import APIException
@@ -18,6 +19,7 @@ app.include_router(CategoryRoutes.get_router(),prefix="")
 app.include_router(ProductRoutes.get_router(),prefix="")
 app.include_router(WarehouseRoutes.get_router(),prefix="/warehouses")
 app.include_router(SupplierRoutes.get_router(),prefix="/suppliers")
+app.include_router(PORoutes.get_router(),prefix="/purchase_order")
 
 
 

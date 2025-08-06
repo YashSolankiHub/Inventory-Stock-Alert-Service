@@ -40,13 +40,13 @@ class SupplierService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating supplier with data: {pydantic_data}")
 
-        is_supplier_exists = self.db.query(UserModel).filter(or_(
+        supplier = self.db.query(UserModel).filter(or_(
                 SupplierModel.email == pydantic_data["email"],
                 SupplierModel.mobile == pydantic_data["mobile"],
                 )).first()
         
         #check supllier is already exist or not with data mobile , email
-        if is_supplier_exists:
+        if supplier:
             logger.warning(f"supllier already exists with same email/username/mobile")
             raise AlreadyRegistered("Email or mobile number is already registered!")
         

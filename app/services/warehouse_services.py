@@ -39,16 +39,16 @@ class WarehouseService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating product with data: {pydantic_data}")
 
-        is_warehouse_exists = self.db.query(WarehouseModel).filter(func.lower(WarehouseModel.name) == func.lower(pydantic_data['name'])).first()
+        warehouse = self.db.query(WarehouseModel).filter(func.lower(WarehouseModel.name) == func.lower(pydantic_data['name'])).first()
 
         #check warehouse already exists or not
-        if is_warehouse_exists:
+        if warehouse:
             logger.warning(f"Warehouse {pydantic_data['name']} already exists!")
             raise AlreadyExistsException('Warehosue already exists')
         
-        warehouse_manager_id = self.db.query(UserModel).filter_by(id = pydantic_data['warehouse_manager_id'], role= UserRoles.WAREHOUSE_MANAGER).first()
+        warehouse_manager_record = self.db.query(UserModel).filter_by(id = pydantic_data['warehouse_manager_id'], role= UserRoles.WAREHOUSE_MANAGER).first()
 
-        if not warehouse_manager_id:
+        if not warehouse_manager_record:
             logger.warning(f"warehosue manager id with {pydantic_data['warehouse_manager_id']} does not exists")
             raise NotFoundException(f"warehosue manager id with {pydantic_data['warehouse_manager_id']} does not exists")
         

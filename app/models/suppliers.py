@@ -16,6 +16,6 @@ class Supplier(Base,CommonFieldsMixin):
     mobile:Mapped[BIGINT] = mapped_column(BIGINT, unique=True)
     lead_time_days:Mapped[int] = mapped_column(Integer)
 
-    pos:Mapped[List["PurchaseOrder"]] = relationship(back_populates="supplier")
+    # pos:Mapped[List["PurchaseOrder"]] = relationship(back_populates="supplier")
 
 

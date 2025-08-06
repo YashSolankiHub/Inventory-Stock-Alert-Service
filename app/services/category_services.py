@@ -35,10 +35,10 @@ class CategoryService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating category with data: {pydantic_data}")
 
-        is_cat_exists = self.db.query(CategoryModel).filter(func.lower(CategoryModel.name)  == func.lower(pydantic_data["name"])).first()
+        category_record = self.db.query(CategoryModel).filter(func.lower(CategoryModel.name)  == func.lower(pydantic_data["name"])).first()
 
         #check category is exists
-        if is_cat_exists:
+        if category_record:
             logger.warning(f"Category {pydantic_data['name']} already exists!")
             raise AlreadyExistsException("Category already exists!")
         
