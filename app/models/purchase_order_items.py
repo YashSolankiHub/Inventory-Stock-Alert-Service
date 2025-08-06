@@ -15,7 +15,7 @@ class POItem(Base,CommonFieldsMixin):
     sku:Mapped[str] = mapped_column(String(50))
     qty:Mapped[int] = mapped_column(Integer, default=0)
     unit_cost:Mapped[int] = mapped_column(Integer)
-    toatl_cost:Mapped[int] = mapped_column(Integer)
+    total_cost:Mapped[int] = mapped_column(Integer)
     po_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('purchase_orders.id'))
 
     po:Mapped["PurchaseOrder"] = relationship(back_populates="po_items")

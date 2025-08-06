@@ -15,8 +15,6 @@ class Product(Base,CommonFieldsMixin):
     sku:Mapped[str] = mapped_column(String(50))
     name:Mapped[str] = mapped_column(String(30))
     description:Mapped[str] = mapped_column(String(50))
-    qty:Mapped[int] = mapped_column(Integer, default=0)
-    cost:Mapped[int] = mapped_column(Integer)
     model:Mapped[str] = mapped_column(String(20), nullable=True)
     brand:Mapped[str] = mapped_column(String(20))
     category_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('categories.id'))

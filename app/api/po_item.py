@@ -27,50 +27,46 @@ from app.schemas.supplier import *
 from app.services.supplier_services import SupplierService
 from app.schemas.po import *
 from app.services.po_services import POService
+from app.services.po_item_service import POItemService
+from app.schemas.po_items import *
 
 
 logger = LoggingService(__name__).get_logger()
 
 
-class PORoutes():
+class POItemRoutes():
     @classmethod
     def get_router(cls)->APIRouter:
         """
-        Create and return an APIRouter with all PO-related endpoints.
+        Create and return an APIRouter with all POItem-related endpoints.
 
         This includes:
         
 
         Returns:
-            APIRouter: Configured router with PO routes.
+            APIRouter: Configured router with POItem routes.
         """    
 
-        router = APIRouter(prefix="", tags=["Purchase Order"])
+        router = APIRouter(prefix="", tags=["Purchase Order Items"])
 
 
-        @router.post("", response_model= StandardResponse[POResponseSchema])
+        @router.post("", response_model= StandardResponse[POItemResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def create_PO(PurchaseOrder:POCreateSchema , request:Request, db:Session = Depends(get_db)):
-            """create Purchase order  with supplier id 
+        async def create_PO(PurchaseOrderItem:POItemCreateSchema , request:Request, db:Session = Depends(get_db)):
+            """create Purchase order item  with data of sku, 
 
             args: 
-                PurchaseOrder: pydantic model
+                PurchaseOrderIitem: pydantic model
                 db: session varibale for interactios with database
 
             """
-            logger.info(f"POST :- /Purchase_orders endpoint called for creating Purchase Order")
-            service = POService(db)
-            purchase_order = service.create_purchase_order(PurchaseOrder)
-            purchase_order_py_obj = POResponseSchema.model_validate(purchase_order)
-            purchase_order_data = purchase_order_py_obj.model_dump()
-
-            purchase_order_data['expected_date'] = str(purchase_order_data['expected_date'])[:10]
-            
-
+            logger.info(f"POST :- /Purchase_orders_items endpoint called for creating Purchase Order")
+            service = POItemService(db)
+            purchase_order_item = service.create_purchase_order_item(PurchaseOrderItem)
 
             return StandardResponse(
                 success=True,
-                data = purchase_order_data,
+                data =purchase_order_item,
                 msg="Purchase Order created",
             )
         return router

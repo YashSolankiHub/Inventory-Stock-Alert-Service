@@ -23,6 +23,7 @@ from app.utils.helper import generate_sku
 from app.models.purchase_orders import PurchaseOrder as PurchaseOrderModel
 from app.models.suppliers import Supplier as SupplierModel
 from datetime import datetime, timedelta
+from app.models.purchase_order_items import POItem as POItemModel
 
 
 
@@ -31,33 +32,45 @@ import uuid
 logger = LoggingService(__name__).get_logger() 
 
 
-class POService(CommonService):
+class POItemService(CommonService):
     def __init__(self,db:Session):
         self.db = db
-        CommonService.__init__(self,db, PurchaseOrderModel)
+        CommonService.__init__(self,db, POItemModel)
 
-    def create_purchase_order(self, py_model:BaseModel):
+    def create_purchase_order_item(self, py_model:BaseModel):
         pydantic_data = py_model.model_dump()
-        logger.info(f"Creating po with data: {pydantic_data}")
+        logger.info(f"Creating po item  with data: {pydantic_data}")
 
-        supplier = self.db.query(SupplierModel).filter_by(id=pydantic_data['supplier_id']).first()
+        purchase_order_record = self.db.query(PurchaseOrderModel).filter_by(id = pydantic_data['po_id']).first()
 
-        #check supplier_id is exists or not
-        if not supplier:
-            logger.warning(f"Supplier with id {pydantic_data['supplier_id']} not exists")
-            raise NotFoundException(f"Supplier with id {pydantic_data['supplier_id']} not exists")
+        #check purchase order exists or not
+        if not purchase_order_record:
+            logger.warning(f"Purchase order with id {pydantic_data['po_id']} not found!")
+            raise NotFoundException(f"Purchase order with id {pydantic_data['po_id']} not found!")
         
-        lead_time_days = supplier.lead_time_days
-        logger.info(f"supplier's lead time days: {lead_time_days}")
+        product_record = self.db.query(ProductModel).filter_by(sku = pydantic_data['sku']).all()
 
-        pydantic_data["expected_date"] = datetime.now(timezone.utc) + timedelta(days=lead_time_days) 
-        logger.info(f"expected date set to {datetime.now(timezone.utc) + timedelta(days=lead_time_days)}")
+        #check product exists or not with sku
+        if not product_record:
+            logger.warning(f"Product with sku{pydantic_data['sku']} not found!")
+            raise NotFoundException(f"Product with sku {pydantic_data['sku']} not found!")
+        
+        logger.info(f"Adding new po item : {pydantic_data}")
+        po_item = self.create_record(pydantic_data)
+        return po_item
 
-        purchase_order = self.create_record(pydantic_data)
-        logger.info(f"Adding purchase order {pydantic_data}")
+        
 
-        return purchase_order
 
+
+        
+
+
+            
+
+
+
+        
 
 
 
