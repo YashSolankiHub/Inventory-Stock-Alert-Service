@@ -52,7 +52,7 @@ class POItemRoutes():
 
         @router.post("/purchase_order_items", response_model= StandardResponse[POItemResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def create_purchase_order_item(PurchaseOrderItem:POItemCreateSchema , request:Request, db:Session = Depends(get_db)):
+        async def create_purchase_order_item(purchase_order_item:POItemCreateSchema , request:Request, db:Session = Depends(get_db)):
             """create Purchase order item  with data of sku, 
 
             args: 
@@ -62,7 +62,7 @@ class POItemRoutes():
             """
             logger.info(f"POST :- /Purchase_orders_items endpoint called for creating Purchase Order")
             service = POItemService(db)
-            purchase_order_item = service.create_purchase_order_item(PurchaseOrderItem)
+            purchase_order_item = service.create_purchase_order_item(purchase_order_item)
 
             return StandardResponse(
                 success=True,

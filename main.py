@@ -8,6 +8,7 @@ from app.api.supplier import SupplierRoutes
 from app.api.purchase_order import PORoutes
 from app.api.po_item import POItemRoutes
 from app.api.bin import BinRoutes
+from app.api.inventory import InventoryRoutes
 from fastapi.responses import JSONResponse
 from fastapi.openapi.utils import get_openapi
 from app.exceptions.base import APIException
@@ -24,6 +25,7 @@ app.include_router(SupplierRoutes.get_router(),prefix="/suppliers")
 app.include_router(PORoutes.get_router(),prefix="/purchase_order")
 app.include_router(POItemRoutes.get_router(),prefix="")
 app.include_router(BinRoutes.get_router(),prefix="/bins")
+app.include_router(InventoryRoutes.get_router(),prefix="/inventory_item")
 
 
 

@@ -5,9 +5,6 @@ from app.models.common_fields import CommonFieldsMixin
 from typing import List, TYPE_CHECKING
 
 
-if TYPE_CHECKING:
-    from app.models.purchase_orders import PurchaseOrder
-
 
 class Supplier(Base,CommonFieldsMixin):
     __tablename__ = "suppliers"

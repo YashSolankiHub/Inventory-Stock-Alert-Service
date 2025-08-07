@@ -6,10 +6,6 @@ from typing import List, TYPE_CHECKING
 from app.enums.enums import UserRoles
 
 
-# if TYPE_CHECKING:
-#     from app.models.enrollment import Enrollment
-#     from app.models.otp import OTP
-
 
 class User(Base,CommonFieldsMixin):
     __tablename__ = "users"

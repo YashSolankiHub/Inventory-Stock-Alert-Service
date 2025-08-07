@@ -25,6 +25,9 @@ from app.models.suppliers import Supplier as SupplierModel
 from datetime import datetime, timedelta
 from app.schemas.po import *
 from app.models.warehouses import Warehouse as WarehouseModel
+from app.exceptions.purchase_order import *
+from app.models.received_po_item import ReceivedPOItem as ReceivedPOItemModel
+from app.models.purchase_order_items import POItem as POItemModel
 
 
 
@@ -88,16 +91,38 @@ class POService(CommonService):
             logger.warning(f"Purchase Order with id {id} does not have any item to orderd! Please add items to PO")
             raise NotFoundException(f"Purchase Order with id {id} does not have any item to order! Please add items to PO")
         
-        #raise exception if po status is ordered because if status is orderd we can't change or delete po item
-        elif purchase_order_record.status == PurchaseOrderStatus.ORDERD:
-            logger.warning(f"Purchase Order with id {id} already ordered")
-            raise AlreadyExistsException(f"Purchase Order with id {id} already ordered")
-        
-        #raise exception if po status is received because items already received
-        elif purchase_order_record.status == PurchaseOrderStatus.RECEIVED:
-            logger.warning(f"Purchase Order with id {id} already received")
-            raise AlreadyExistsException(f"Purchase Order with id {id} already received")
+        #raise exception if staus is same as request staus
+        elif purchase_order_record.status == pydantic_data['status']:
+            logger.warning(f"PO with {id }Already in {pydantic_data['status'].value}")
+            raise AlreadyRegistered(f"PO with {id } Already in {pydantic_data['status'].value} state")
 
+        #raise exception if status is drfat and trying to change with received
+        if purchase_order_record.status == PurchaseOrderStatus.DRAFT and pydantic_data['status'] != PurchaseOrderStatus.ORDERD:
+            logger.warning("Cannot change PO from DRAFT to RECEIVED directly. It must be ORDERED first.")
+            raise InvalidStatusTransitionException("Cannot change PO from DRAFT to RECEIVED directly. It must be ORDERED first.")
+        
+        #raise exception if status is orderd and tryoing to change with draft
+        elif purchase_order_record.status == PurchaseOrderStatus.ORDERD and pydantic_data['status'] != PurchaseOrderStatus.RECEIVED:
+            logger.warning(f"PO with {id} already ordered you can't change make it draft")
+            raise InvalidStatusTransitionException(f"PO with {id} already ordered you can't change make it draft")
+        
+        received_items = self.db.query(POItemModel).filter_by(po_id = id).all()
+
+        received_item_record = []
+        for received_item in received_items:
+            item = ReceivedPOItemModel(
+                product_id = received_item.product_id,
+                sku = received_item.sku,
+                qty = received_item.qty
+            )
+            received_item_record.append(item)
+
+        self.db.add_all(received_item_record)
+        try:
+            self.db.commit()
+        except SQLAlchemyError as e:
+            self.db.rollback()
+            raise DataBaseError(e)
 
         
         status_updated_po = self.update_record_by_id(id, py_model)

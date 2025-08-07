@@ -71,12 +71,10 @@ class PORoutes():
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
         async def update_po_status(id:UUID,PurchaseOrderStatus:POStatusUpdateSchema , request:Request, db:Session = Depends(get_db)):
             """update Purchase order status  
-
             args: 
                 id: purchase order id
                 PurchaseOrderStatus: pydantic model
                 db: session varibale for interactios with database
-
             """
             logger.info(f"PATCH :- /purchase_orders/{id}/status endpoint called for updating Purchase Order status")
             service = POService(db)
@@ -87,15 +85,3 @@ class PORoutes():
                 msg="Purchase Order status updated",
             )
         return router
-
-
-
-
-            
-
-
-
-        
-
-
-        

@@ -25,6 +25,8 @@ from app.schemas.warehouse import *
 from app.services.warehouse_services import WarehouseService
 from app.services.bin_service import BinService
 from app.schemas.bin import *
+from app.schemas.inventory_item import *
+from app.services.inventory_item import InventoryItemService
 
 logger = LoggingService(__name__).get_logger()
 
@@ -43,5 +45,30 @@ class InventoryRoutes():
         """    
 
         router = APIRouter(prefix="", tags=["Inventory"])
-        
+
+        @router.post("/", response_model=StandardResponse[InventoryItemResponseSchema])
+        async def add_item_in_inventory(inventory_item :InventoryItemCreateSchema, db:Session= Depends(get_db)):
+            """create inventory item with data of po item id,product id, qty, bin id etc
+
+            args: 
+                inventory_item: pydantic model
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"POST :- /inventory_items endpoint called for creating item in inventorr")
+
+            service = InventoryItemService(db)
+            inventory_item = service.add_item_in_inventory(inventory_item)
+            return StandardResponse(
+                success=True,
+                data =inventory_item,
+                msg="Item aadde to inventory",
+            )
+        return router
+            
+
+
+
+
+
 

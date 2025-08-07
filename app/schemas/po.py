@@ -39,6 +39,7 @@ class POStatusUpdateResponseSchema(BaseModel):
     status: PurchaseOrderStatus
     expected_date:datetime.date
     supplier_id:UUID
+    warehouse_id:UUID
 
     class Config:
         from_attributes = True
