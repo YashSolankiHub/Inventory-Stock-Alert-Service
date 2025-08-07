@@ -45,7 +45,7 @@ class POService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating po with data: {pydantic_data}")
 
-        supplier = self.db.query(SupplierModel).filter_by(id=pydantic_data['supplier_id']).first()
+        supplier = self.db.get(SupplierModel,pydantic_data['supplier_id'] )
 
         #check supplier_id is exists or not
         if not supplier:
@@ -99,12 +99,12 @@ class POService(CommonService):
         #raise exception if status is drfat and trying to change with received
         if purchase_order_record.status == PurchaseOrderStatus.DRAFT and pydantic_data['status'] != PurchaseOrderStatus.ORDERD:
             logger.warning("Cannot change PO from DRAFT to RECEIVED directly. It must be ORDERED first.")
-            raise InvalidStatusTransitionException("Cannot change PO from DRAFT to RECEIVED directly. It must be ORDERED first.")
+            raise InvalidStatusException("Cannot change PO from DRAFT to RECEIVED directly. It must be ORDERED first.")
         
         #raise exception if status is orderd and tryoing to change with draft
         elif purchase_order_record.status == PurchaseOrderStatus.ORDERD and pydantic_data['status'] != PurchaseOrderStatus.RECEIVED:
             logger.warning(f"PO with {id} already ordered you can't change make it draft")
-            raise InvalidStatusTransitionException(f"PO with {id} already ordered you can't change make it draft")
+            raise InvalidStatusException(f"PO with {id} already ordered you can't change make it draft")
         
         received_items = self.db.query(POItemModel).filter_by(po_id = id).all()
 
@@ -113,7 +113,8 @@ class POService(CommonService):
             item = ReceivedPOItemModel(
                 product_id = received_item.product_id,
                 sku = received_item.sku,
-                qty = received_item.qty
+                qty = received_item.qty,
+                po_id = purchase_order_record.id
             )
             received_item_record.append(item)
 

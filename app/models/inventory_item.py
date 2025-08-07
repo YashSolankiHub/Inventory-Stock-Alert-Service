@@ -13,4 +13,5 @@ class InventoryItem(Base,CommonFieldsMixin):
     product_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("products.id"))
     qty:Mapped[int] = mapped_column(Integer)
     bin_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('bins.id'))
+    
 

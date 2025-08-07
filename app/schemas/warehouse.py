@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, computed_field
 from uuid import UUID
 from typing import Optional, List
 from app.schemas.bin import BinResponseSchema
@@ -11,8 +11,11 @@ class WarehouseCreateSchema(BaseModel):
     max_bins:int = Field(...,gt=0, lt=101)
     warehouse_manager_id:UUID = Field(...)
 
+    @computed_field
+    @property
+    def available_bins(cls)->int:
+        return cls.max_bins
 
-    
 
 class WarehouseResponseSchema(BaseModel):
     id:UUID
@@ -22,6 +25,7 @@ class WarehouseResponseSchema(BaseModel):
     warehouse_manager_id:UUID 
     max_bins:int
     current_bins:int
+    available_bins:int
     bins:List[BinResponseSchema]
 
     class Config:

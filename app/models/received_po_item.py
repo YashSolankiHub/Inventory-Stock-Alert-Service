@@ -15,5 +15,6 @@ class ReceivedPOItem(Base,CommonFieldsMixin):
     product_id:Mapped[uuid.UUID]= mapped_column(UUID(as_uuid=True), ForeignKey('products.id'))
     sku:Mapped[str] = mapped_column(String(50))
     qty:Mapped[int] = mapped_column(Integer, default=0)
+    po_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('purchase_orders.id'))
 
 

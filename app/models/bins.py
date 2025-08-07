@@ -14,7 +14,8 @@ class Bin(Base,CommonFieldsMixin):
     __tablename__ = "bins"
     name:Mapped[str] = mapped_column(String(10))
     max_units:Mapped[int] = mapped_column(Integer)
-    current_stock_qty :Mapped[int] = mapped_column(Integer, default=0)
+    current_stock_units :Mapped[int] = mapped_column(Integer, default=0)
+    available_units :Mapped[int] = mapped_column(Integer)
     warehouse_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey('warehouses.id'))
 
     warehouse:Mapped["Warehouse"] = relationship(back_populates="bins")

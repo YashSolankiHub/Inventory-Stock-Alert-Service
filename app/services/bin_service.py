@@ -40,14 +40,14 @@ class BinService(CommonService):
         pydantic_data = py_model.model_dump()
         logger.info(f"Creating bin with data: {pydantic_data}")
 
-        warehouse_record = self.db.query(WarehouseModel).filter_by(id = pydantic_data['warehouse_id']).first()
+        warehouse_record = self.db.get(WarehouseModel, pydantic_data['warehouse_id'])
 
         #raise exception if warehouse not exists
         if not warehouse_record :
             logger.warning(f"Warehouse with id  {pydantic_data['warehouse_id']} not exists!")
             raise NotFoundException(f"Warehouse with id  {pydantic_data['warehouse_id']} not exists!")
 
-        bin_record = self.db.query(BinModel).filter(func.lower(BinModel.name) == func.lower(pydantic_data['name'])).first()
+        bin_record = self.db.query(BinModel).filter(func.lower(BinModel.name) == func.lower(pydantic_data['name']), BinModel.warehouse_id == warehouse_record.id).first()
 
         #raise exception if bin record is already registered
         if bin_record:

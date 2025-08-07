@@ -92,7 +92,7 @@ class POItemService(CommonService):
     def delete_purchase_order_item(self, purchase_order_id, id):
         logger.info(f"deleting po item  with id : {id} and po id {purchase_order_id}")
 
-        purchase_order_record = self.db.query(PurchaseOrderModel).filter_by(id = purchase_order_id ).first()
+        purchase_order_record = self.db.get(PurchaseOrderModel,purchase_order_id)
 
         #raise exception if purchase_order_record not found
         if not  purchase_order_record:
