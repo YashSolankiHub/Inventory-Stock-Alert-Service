@@ -12,6 +12,8 @@ class UserResponseSchema(BaseModel):
     
     class Config:
         from_attributes = True 
+        arbitrary_types_allowed=True
+
 
 class UserCreateSchema(BaseModel):
     username:str = Field(...,min_length=4)

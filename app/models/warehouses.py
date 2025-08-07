@@ -14,6 +14,8 @@ class Warehouse(Base,CommonFieldsMixin):
     name:Mapped[str] = mapped_column(String(25))
     address:Mapped[str] = mapped_column(String(100))
     capacity_in_sqft:Mapped[int] = mapped_column(Integer)   
+    max_bins:Mapped[int] = mapped_column(Integer)
+    current_bins:Mapped[int] = mapped_column(Integer, default=0)
     warehouse_manager_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'))
     bins:Mapped[List["Bin"]] = relationship(back_populates="warehouse")
 

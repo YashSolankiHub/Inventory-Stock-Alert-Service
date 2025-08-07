@@ -22,6 +22,7 @@ from app.models.products import Product as ProductModel
 from app.utils.helper import generate_sku
 from app.models.warehouses import Warehouse as WarehouseModel
 from app.enums.enums import UserRoles
+from app.models.bins import Bin as BinModel
 
 
 
@@ -30,29 +31,31 @@ import uuid
 logger = LoggingService(__name__).get_logger() 
 
 
-class WarehouseService(CommonService):
+class BinService(CommonService):
     def __init__(self, db:Session):
         self.db = db
-        CommonService.__init__(self,db, WarehouseModel)
+        CommonService.__init__(self,db, BinModel)
 
-    def create_warehouse(self,py_model:BaseModel):
+    def create_bin(self,py_model:BaseModel):
         pydantic_data = py_model.model_dump()
-        logger.info(f"Creating warehouse with data: {pydantic_data}")
+        logger.info(f"Creating bin with data: {pydantic_data}")
 
-        warehouse_record = self.db.query(WarehouseModel).filter(func.lower(WarehouseModel.name) == func.lower(pydantic_data['name'])).first()
+        warehouse_record = self.db.query(WarehouseModel).filter_by(id = pydantic_data['warehouse_id']).first()
 
-        #raise exception if warehouse record is already registered
-        if warehouse_record:
-            logger.warning(f"Warehouse {pydantic_data['name']} already exists!")
-            raise AlreadyExistsException('Warehosue already exists')
+        #raise exception if warehouse not exists
+        if not warehouse_record :
+            logger.warning(f"Warehouse with id  {pydantic_data['warehouse_id']} not exists!")
+            raise NotFoundException(f"Warehouse with id  {pydantic_data['warehouse_id']} not exists!")
+
+        bin_record = self.db.query(BinModel).filter(func.lower(BinModel.name) == func.lower(pydantic_data['name'])).first()
+
+        #raise exception if bin record is already registered
+        if bin_record:
+            logger.warning(f"Bin {pydantic_data['name']} already exists!")
+            raise AlreadyExistsException('Bin already exists')
+
         
-        warehouse_manager_record = self.db.query(UserModel).filter_by(id = pydantic_data['warehouse_manager_id'], role= UserRoles.WAREHOUSE_MANAGER).first()
-
-        if not warehouse_manager_record:
-            logger.warning(f"warehosue manager id with {pydantic_data['warehouse_manager_id']} does not exists")
-            raise NotFoundException(f"warehosue manager id with {pydantic_data['warehouse_manager_id']} does not exists")
-        
-        logger.info(f"Adding new warehouse: {pydantic_data}")
+        logger.info(f"Adding new bin: {pydantic_data}")
         warehouse = self.create_record(pydantic_data)
         return warehouse
         

@@ -23,53 +23,25 @@ from app.schemas.product import *
 from app.services.product_services import ProductService
 from app.schemas.warehouse import *
 from app.services.warehouse_services import WarehouseService
+from app.services.bin_service import BinService
+from app.schemas.bin import *
+
 logger = LoggingService(__name__).get_logger()
 
 
-class WarehouseRoutes():
+class InventoryRoutes():
     @classmethod
     def get_router(cls)->APIRouter:
         """
-        Create and return an APIRouter with all Warehouse-related endpoints.
+        Create and return an APIRouter with all inventory-related endpoints.
 
         This includes:
         
 
         Returns:
-            APIRouter: Configured router with Warehouse routes.
+            APIRouter: Configured router with inventory routes.
         """    
 
-        router = APIRouter(prefix="", tags=["Warehouse"])
-
-
-        @router.post("", response_model= StandardResponse[WarehouseResponseSchema])
-        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def create_Warehouse(warehouse:WarehouseCreateSchema , request:Request, db:Session = Depends(get_db)):
-            """create Warehouse  with data of name, address, capacity, warehouse_manager_id etc
-
-            args: 
-                Warehouse: pydantic model
-                db: session varibale for interactios with database
-
-            """
-            logger.info(f"POST :- /warehouses endpoint called for creating Warehouse")
-            service = WarehouseService(db)
-            warehouse = service.create_warehouse(warehouse)
-            return StandardResponse(
-                success=True,
-                data = warehouse,
-                msg="Warehouse created",
-            )
-        return router
-
-
-
-
-            
-
-
-
+        router = APIRouter(prefix="", tags=["Inventory"])
         
 
-
-        

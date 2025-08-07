@@ -34,6 +34,7 @@ class Validators:
         if not re.match(r'^[a-zA-Z0-9_.-]{4,20}$', value):
             raise ValueError("Username must be 4-20 characters and can only contain letters, numbers, _, ., -")
         return value
+
     
 
     

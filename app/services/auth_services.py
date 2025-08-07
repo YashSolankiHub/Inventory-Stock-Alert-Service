@@ -38,14 +38,14 @@ class AuthServices(CommonService):
             logger.info(f"Authenticating user: {username}")
             user = self.db.query(UserModel).filter(UserModel.username == username).first()
 
-            #check if user not exists then retutn false
+            #raise exception id user not found
             if not user:
                 logger.warning(f"User with{username} not found")    
                 return False
             pwd_context = PwdContext()  
 
 
-            #verify password
+            #verify password and return false if password missmatched
             if not pwd_context.verify_password(password, user.password):
                 logger.warning(f"Password mismatch for user {username}")
                 return False
@@ -63,13 +63,13 @@ class AuthServices(CommonService):
         logger.debug(f"Creating user with email: {pydantic_data['email']}, username: {pydantic_data['username']}, mobile: {pydantic_data['mobile']}")
         pydantic_data["role"] = role
 
-        #check if user exists or not for field email, username , mobile
         is_user_exists = self.db.query(UserModel).filter(or_(
                 UserModel.email == pydantic_data["email"],
                 UserModel.username == pydantic_data["username"],
                 UserModel.mobile == pydantic_data["mobile"],
                 )).first()
 
+        #raise exception if email or, ursename or mobile already registed for user
         if is_user_exists:
             logger.warning(f"User already exists with same email/username/mobile")
             raise AlreadyRegistered()

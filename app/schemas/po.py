@@ -11,6 +11,7 @@ from enum import Enum
 
 class POCreateSchema(BaseModel):
     supplier_id:UUID = Field(...)
+    warehouse_id:UUID = Field(...)
 
 
 class POResponseSchema(BaseModel):
@@ -19,6 +20,7 @@ class POResponseSchema(BaseModel):
     status:str
     expected_date:datetime.date
     supplier_id:UUID
+    warehouse_id:UUID
     po_items:List[POItemResponseSchema]
 
 

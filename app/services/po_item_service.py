@@ -48,14 +48,24 @@ class POItemService(CommonService):
 
         purchase_order_record = self.db.query(PurchaseOrderModel).filter_by(id = pydantic_data['po_id']).first()
 
-        #check purchase order exists or not
+        #raise exception if purchase order record not found
         if not purchase_order_record:
             logger.warning(f"Purchase order with id {pydantic_data['po_id']} not found!")
             raise NotFoundException(f"Purchase order with id {pydantic_data['po_id']} not found!")
         
+        #raise exception if po status is ordered because if status is orderd we can't change or delete po item
+        elif purchase_order_record.status == PurchaseOrderStatus.ORDERD:
+            logger.warning(f"Purchase Order with id {pydantic_data['po_id']} already ordered you can't add item to this PO")
+            raise AlreadyExistsException(f"Purchase Order with id {pydantic_data['po_id']} already ordered you can't add item to this PO")
+        
+        #raise exception if po status is received because items already received
+        elif purchase_order_record.status == PurchaseOrderStatus.RECEIVED:
+            logger.warning(f"Purchase Order with id {pydantic_data['po_id']} already received")
+            raise AlreadyExistsException(f"Purchase Order with id {pydantic_data['po_id']} already received")
+        
         product_record = self.db.query(ProductModel).filter_by(id = pydantic_data['product_id'], sku= pydantic_data['sku']).first()
 
-        #check product exists or not with sku
+        #raise exception if producr record not found
         if not product_record:
             logger.warning(f"Product with id{pydantic_data['product_id']} and sku {pydantic_data['sku']} not found!")
             raise NotFoundException(f"Product with id{pydantic_data['product_id']} and sku {pydantic_data['sku']} not found!")
@@ -84,7 +94,7 @@ class POItemService(CommonService):
 
         purchase_order_record = self.db.query(PurchaseOrderModel).filter_by(id = purchase_order_id ).first()
 
-        #check purchase order with id exist or not
+        #raise exception if purchase_order_record not found
         if not  purchase_order_record:
             logger.warning(f"PO with id{purchase_order_id} not found!")
             raise NotFoundException(f"Purchase Order with id{purchase_order_id} not found!")
@@ -96,12 +106,9 @@ class POItemService(CommonService):
             logger.warning(f"Purchase Order with id {id} already received")
             raise AlreadyExistsException(f"Purchase Order with id {id} already received")
 
-
-        
-
         purchase_order_item_record =  self.get_record_by_id(id)
 
-        #check poitem exists or not
+        #raise exception if purchase_order_item_record not found
         if not purchase_order_item_record :
             logger.warning(f"PO item with id{id} not found!")
             raise NotFoundException(f"Purchase Order item with id {id} not found!")

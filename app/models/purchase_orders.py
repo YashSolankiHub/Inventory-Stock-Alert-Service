@@ -18,6 +18,7 @@ class PurchaseOrder(Base,CommonFieldsMixin):
     total_po_cost:Mapped[int] = mapped_column(Integer, default=0)
     expected_date:Mapped[datetime]  = mapped_column(DateTime)
     status:Mapped[PurchaseOrderStatus] = mapped_column(SQLEnum(PurchaseOrderStatus), default= PurchaseOrderStatus.DRAFT)
+    warehouse_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('warehouses.id'))
     supplier_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('suppliers.id'))
     po_items: Mapped[List["POItem"]] = relationship(back_populates="po")
 

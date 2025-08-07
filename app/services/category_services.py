@@ -37,7 +37,7 @@ class CategoryService(CommonService):
 
         category_record = self.db.query(CategoryModel).filter(func.lower(CategoryModel.name)  == func.lower(pydantic_data["name"])).first()
 
-        #check category is exists
+        #raise exception if category is already registered
         if category_record:
             logger.warning(f"Category {pydantic_data['name']} already exists!")
             raise AlreadyExistsException("Category already exists!")

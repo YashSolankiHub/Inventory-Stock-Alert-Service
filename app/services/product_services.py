@@ -41,7 +41,7 @@ class ProductService(CommonService):
 
         product_record = self.db.query(ProductModel).filter(func.lower(ProductModel.name)  == func.lower(pydantic_data["name"])).first()
 
-        #check product is exists or not
+        #raise exception if product_record is already registered
         if product_record:
             logger.warning(f"Product {pydantic_data['name']} already exists!")
             raise AlreadyExistsException("Product already exists!")
@@ -49,7 +49,7 @@ class ProductService(CommonService):
 
         category_record = self.db.query(CategoryModel).filter_by(id = pydantic_data['category_id']).first()
 
-        #check category id is exists or notss
+        #raise exception if category_record not found
         if not category_record:
             logger.warning(f"Category with id {pydantic_data['category_id']} not found!")
             raise NotFoundException(f"Category with id {pydantic_data['category_id']} not found!")

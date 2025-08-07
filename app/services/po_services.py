@@ -24,6 +24,7 @@ from app.models.purchase_orders import PurchaseOrder as PurchaseOrderModel
 from app.models.suppliers import Supplier as SupplierModel
 from datetime import datetime, timedelta
 from app.schemas.po import *
+from app.models.warehouses import Warehouse as WarehouseModel
 
 
 
@@ -48,6 +49,14 @@ class POService(CommonService):
             logger.warning(f"Supplier with id {pydantic_data['supplier_id']} not exists")
             raise NotFoundException(f"Supplier with id {pydantic_data['supplier_id']} not exists")
         
+        warehouse = self.db.query(WarehouseModel).filter_by(id = pydantic_data['warehouse_id']).first()
+
+        #check warehouse with id exists or not
+        if not warehouse:
+            logger.warning(f"Warehouse with id {pydantic_data['warehouse_id']} not exists")
+            raise NotFoundException(f"Warehouse with id {pydantic_data['warehouse_id']} not exists")
+        
+        
         lead_time_days = supplier.lead_time_days
         logger.info(f"supplier's lead time days: {lead_time_days}")
 
@@ -69,16 +78,22 @@ class POService(CommonService):
 
         purchase_order_record = self.get_record_by_id(id)
 
-        #check purchase order record exists or not with id
+        #raise exception if purchase_order_record not found
         if not purchase_order_record:
             logger.warning(f"Purchase Order with id {id} not exists")
             raise NotFoundException(f"Purchase Order with id {id} not exists")
+        
+        #raise exception if total_po_cost is 0 means no po item set with po
         elif not purchase_order_record.total_po_cost:
             logger.warning(f"Purchase Order with id {id} does not have any item to orderd! Please add items to PO")
             raise NotFoundException(f"Purchase Order with id {id} does not have any item to order! Please add items to PO")
+        
+        #raise exception if po status is ordered because if status is orderd we can't change or delete po item
         elif purchase_order_record.status == PurchaseOrderStatus.ORDERD:
             logger.warning(f"Purchase Order with id {id} already ordered")
             raise AlreadyExistsException(f"Purchase Order with id {id} already ordered")
+        
+        #raise exception if po status is received because items already received
         elif purchase_order_record.status == PurchaseOrderStatus.RECEIVED:
             logger.warning(f"Purchase Order with id {id} already received")
             raise AlreadyExistsException(f"Purchase Order with id {id} already received")

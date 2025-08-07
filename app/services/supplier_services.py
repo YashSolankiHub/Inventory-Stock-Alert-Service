@@ -45,7 +45,7 @@ class SupplierService(CommonService):
                 SupplierModel.mobile == pydantic_data["mobile"],
                 )).first()
         
-        #check supllier is already exist or not with data mobile , email
+        #raise exception if supplier is already registered
         if supplier:
             logger.warning(f"supllier already exists with same email/username/mobile")
             raise AlreadyRegistered("Email or mobile number is already registered!")

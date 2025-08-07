@@ -178,3 +178,34 @@
 ]
 
 
+
+
+
+
+
+{
+  "name": "Central Warehouse AHM",
+  "address": "123 Main Street, Ahmedabad",
+  "capacity_in_sqft": 5000,
+  "max_bins": 100,
+  "warehouse_manager_id": "c4a9a71a-3c94-45e1-b29e-09360d952b56"
+}
+
+
+
+{
+  "name": "East Side Storage SRT",
+  "address": "Plot 45, Industrial Area, Surat",
+  "capacity_in_sqft": 3000,
+  "max_bins": 60,
+  "warehouse_manager_id": "103a1def-b4c4-4541-9f9c-2cae6127deb5"
+}
+
+
+{
+  "name": "West Logistics Hub RJKT",
+  "address": "Warehouse Road, Rajkot",
+  "capacity_in_sqft": 4000,
+  "max_bins": 80,
+  "warehouse_manager_id": "286d93a6-73b1-4f0d-b55e-9484b3ac4ad9"
+}
