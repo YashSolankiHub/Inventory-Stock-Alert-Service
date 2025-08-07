@@ -7,10 +7,12 @@ class InventoryItemCreateSchema(BaseModel):
     product_id :UUID = Field(...)
     qty:int = Field(...,gt=0)
     bin_id:UUID = Field(...)
+    po_id:UUID = Field(...)
 
 class InventoryItemResponseSchema(BaseModel):
     id:UUID
     product_id:UUID
+    sku:str
     qty:int 
     bin_id:UUID 
 

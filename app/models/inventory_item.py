@@ -9,9 +9,10 @@ from sqlalchemy.dialects.postgresql import UUID
 
 class InventoryItem(Base,CommonFieldsMixin):
     __tablename__ = "inventory_items"
-    po_item_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("purchase_order_items.id"))
     product_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("products.id"))
+    sku:Mapped[str] = mapped_column(String(50))
     qty:Mapped[int] = mapped_column(Integer)
     bin_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('bins.id'))
-    
+    warehouse_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('warehouses.id'))
+
 

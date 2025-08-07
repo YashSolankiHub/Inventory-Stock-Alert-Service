@@ -106,28 +106,33 @@ class POService(CommonService):
             logger.warning(f"PO with {id} already ordered you can't change make it draft")
             raise InvalidStatusException(f"PO with {id} already ordered you can't change make it draft")
         
-        received_items = self.db.query(POItemModel).filter_by(po_id = id).all()
-
-        received_item_record = []
-        for received_item in received_items:
-            item = ReceivedPOItemModel(
-                product_id = received_item.product_id,
-                sku = received_item.sku,
-                qty = received_item.qty,
-                po_id = purchase_order_record.id
-            )
-            received_item_record.append(item)
-
-        self.db.add_all(received_item_record)
-        try:
-            self.db.commit()
-        except SQLAlchemyError as e:
-            self.db.rollback()
-            raise DataBaseError(e)
-
-        
+                
         status_updated_po = self.update_record_by_id(id, py_model)
         logger.info(f"po status updated: {status_updated_po}")
+        
+        received_items = self.db.query(POItemModel).filter_by(po_id = id).all()
+
+        if status_updated_po.status == PurchaseOrderStatus.RECEIVED:
+
+            received_item_record = []
+            for received_item in received_items:
+                item = ReceivedPOItemModel(
+                    product_id = received_item.product_id,
+                    sku = received_item.sku,
+                    qty = received_item.qty,
+                    po_id = purchase_order_record.id
+                )
+                logger.info(f"creating received item with product id {received_item.product_id}")
+                received_item_record.append(item)
+
+            logger.info(f"received item list : {received_item_record}, {len(received_item_record)}")
+            self.db.add_all(received_item_record)
+            try:
+                self.db.commit()
+            except SQLAlchemyError as e:
+                self.db.rollback()
+                raise DataBaseError(e)
+
         return status_updated_po
 
 

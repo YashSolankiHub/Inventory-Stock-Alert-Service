@@ -46,8 +46,8 @@ class InventoryRoutes():
 
         router = APIRouter(prefix="", tags=["Inventory"])
 
-        @router.post("/{po_id}", response_model=StandardResponse[InventoryItemResponseSchema])
-        async def add_received_po_item_in_inventory(po_id:UUID, inventory_item :InventoryItemCreateSchema, db:Session= Depends(get_db)):
+        @router.post("", response_model=StandardResponse[InventoryItemResponseSchema])
+        async def add_received_po_item_in_inventory(inventory_item :InventoryItemCreateSchema, db:Session= Depends(get_db)):
             """create inventory item with data of po item id,product id, qty, bin id etc
 
             args: 
@@ -58,17 +58,14 @@ class InventoryRoutes():
             logger.info(f"POST :- /inventory_items endpoint called for creating item in inventorr")
 
             service = InventoryItemService(db)
-            inventory_item = service.add_item_in_inventory(po_id, inventory_item)
+            inventory_item = service.add_item_in_inventory(inventory_item)
             return StandardResponse(
                 success=True,
                 data =inventory_item,
-                msg="Item aadde to inventory",
+                msg="Item added to inventory",
             )
         return router
             
-
-
-
 
 
 
