@@ -50,9 +50,9 @@ class POItemRoutes():
         router = APIRouter(prefix="", tags=["Purchase Order Items"])
 
 
-        @router.post("", response_model= StandardResponse[POItemResponseSchema])
+        @router.post("/purchase_order_items", response_model= StandardResponse[POItemResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def create_PO(PurchaseOrderItem:POItemCreateSchema , request:Request, db:Session = Depends(get_db)):
+        async def create_purchase_order_item(PurchaseOrderItem:POItemCreateSchema , request:Request, db:Session = Depends(get_db)):
             """create Purchase order item  with data of sku, 
 
             args: 
@@ -69,6 +69,30 @@ class POItemRoutes():
                 data =purchase_order_item,
                 msg="Purchase Order created",
             )
+        
+        @router.delete("/purchase_order/{purchase_order_id}/purchase_order_item/{id}", response_model=StandardResponse[POItemResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def delete_po_item(purchase_order_id:UUID, id:UUID,request:Request, db:Session = Depends(get_db)):
+            """delete Purchase order item , 
+
+            args: 
+                id: purchase order id
+                PurchaseOrderIitem: pydantic model
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"DELETE :- /purchase_order/{purchase_order_id}/purchase_order_item/"
+        "{id} endpoint called for deleting Purchase Order item")
+            service = POItemService(db)
+            deleted_po_item = service.delete_purchase_order_item(purchase_order_id,id)
+            return StandardResponse(
+                success=True,
+                data =deleted_po_item,
+                msg="Purchase Order item deleted",
+            )
+
+
         return router
 
 

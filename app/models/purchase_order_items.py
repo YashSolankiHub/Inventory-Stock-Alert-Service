@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 class POItem(Base,CommonFieldsMixin):
     __tablename__ = "purchase_order_items"
+    product_id:Mapped[uuid.UUID]= mapped_column(UUID(as_uuid=True), ForeignKey('products.id'))
     sku:Mapped[str] = mapped_column(String(50))
     qty:Mapped[int] = mapped_column(Integer, default=0)
     unit_cost:Mapped[int] = mapped_column(Integer)

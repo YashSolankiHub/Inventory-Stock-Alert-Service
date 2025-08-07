@@ -73,12 +73,17 @@ class POService(CommonService):
         if not purchase_order_record:
             logger.warning(f"Purchase Order with id {id} not exists")
             raise NotFoundException(f"Purchase Order with id {id} not exists")
+        elif not purchase_order_record.total_po_cost:
+            logger.warning(f"Purchase Order with id {id} does not have any item to orderd! Please add items to PO")
+            raise NotFoundException(f"Purchase Order with id {id} does not have any item to order! Please add items to PO")
         elif purchase_order_record.status == PurchaseOrderStatus.ORDERD:
             logger.warning(f"Purchase Order with id {id} already ordered")
             raise AlreadyExistsException(f"Purchase Order with id {id} already ordered")
         elif purchase_order_record.status == PurchaseOrderStatus.RECEIVED:
             logger.warning(f"Purchase Order with id {id} already received")
             raise AlreadyExistsException(f"Purchase Order with id {id} already received")
+
+
         
         status_updated_po = self.update_record_by_id(id, py_model)
         logger.info(f"po status updated: {status_updated_po}")

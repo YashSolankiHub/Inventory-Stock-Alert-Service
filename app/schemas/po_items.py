@@ -5,6 +5,7 @@ from uuid import UUID
 
 
 class POItemCreateSchema(BaseModel):
+    product_id:UUID = Field(...)
     sku:str = Field(...,min_length=2)
     qty:int = Field(..., gt=0)
     unit_cost:int = Field(..., gt=0)
@@ -18,12 +19,15 @@ class POItemCreateSchema(BaseModel):
 
 class POItemResponseSchema(BaseModel):
     id:UUID
-    sku:str = Field(...,min_length=2)
-    qty:int = Field(..., gt=0)
-    unit_cost:int = Field(..., gt=0)
-    total_cost:int = Field(...,gt=0)
-    po_id:UUID= Field(...)
+    product_id:UUID
+    sku:str
+    qty:int 
+    unit_cost:int 
+    total_cost:int 
+    po_id:UUID
 
 
     class Config:
         from_attributes = True
+        arbitrary_types_allowed=True
+
