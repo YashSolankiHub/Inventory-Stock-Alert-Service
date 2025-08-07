@@ -53,6 +53,7 @@ class SupplierRoutes():
 
             args: 
                 Supplier: pydantic model
+                request: for extracting user's JWT token
                 db: session varibale for interactios with database
 
             """

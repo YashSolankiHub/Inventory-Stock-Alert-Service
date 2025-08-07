@@ -52,6 +52,8 @@ class BinRoutes():
 
             args: 
                 bin: pydantic model
+                request: for extracting user's JWT token
+
                 db: session varibale for interactios with database
 
             """

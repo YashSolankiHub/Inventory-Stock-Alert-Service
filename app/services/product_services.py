@@ -20,6 +20,7 @@ from app.exceptions.auth import *
 from app.exceptions.common import *
 from app.models.products import Product as ProductModel
 from app.utils.helper import generate_sku
+from app.schemas.product import *
 
 
 
@@ -70,6 +71,86 @@ class ProductService(CommonService):
         logger.info(f"Adding new product: {pydantic_data}")
         product = self.create_record(pydantic_data)
         return product
+    
+    def get_product(self, id):
+        logger.info(f"getting product with id: {id}")
+        
+        product_record = self.get_record_by_id(id)
+        #raise exception if product not found
+        if not product_record:
+            logger.warning(f"Product with id {id} not found!")
+            raise NotFoundException(f"Product with id {id} not found!")
+        
+        return product_record
+
+    
+    def update_product(self, id, py_model:BaseModel):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"updating product with data: {pydantic_data}")
+
+        product_record = self.get_record_by_id(id)
+
+        #raise exception if product not found
+        if not product_record:
+            logger.warning(f"Product with id {id} not found!")
+            raise NotFoundException(f"Product with id {id} not found!")
+        
+        #get category for generating sku
+        category = self.db.query(CategoryModel).filter_by(id = product_record.category_id ).first()
+
+        updated_product_sku = generate_sku(category.name,product_record.brand,pydantic_data['name'],product_record.model)
+        logger.info(f"Updated product sku{updated_product_sku}")
+
+        #update product sku
+        pydantic_data['sku'] = updated_product_sku
+
+        py_model =ProductUpdateSchema (
+            **pydantic_data
+        )
+
+        updated_product = self.update_record_by_id(id,py_model)
+        logger.info(f"updating product with id: {id}")
+
+        return updated_product
+    
+    def delete_product(self, id):
+        logger.info(f"deleting product with id: {id}")
+
+        product_record = self.get_record_by_id(id)
+
+        #raise exception if product not found
+        if not product_record:
+            logger.warning(f"Product with id {id} not found!")
+            raise NotFoundException(f"Product with id {id} not found!")
+        
+        deleted_product = self.delete_record_by_id(id, ProductResponseSchema )
+        logger.info(f"deleting product with id: {id}")
+
+        return deleted_product
+    
+    def list_products(self):
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+
+
+
+
+
+
+
 
         
         

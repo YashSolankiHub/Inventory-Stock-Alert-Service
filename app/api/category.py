@@ -45,6 +45,8 @@ class CategoryRoutes():
 
             args: 
                 category: pydantic model
+                request: for extracting user's JWT token
+
                 db: session varibale for interactin database
 
             """

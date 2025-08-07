@@ -41,13 +41,14 @@ class ProductRoutes():
         router = APIRouter(prefix="", tags=["product"])
 
 
-        @router.post("/products", response_model= StandardResponse[ProductResponseSchema])
+        @router.post("/", response_model= StandardResponse[ProductResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
         async def create_product(product:ProductCreateSchema , request:Request, db:Session = Depends(get_db)):
             """create product  with data of name, qty, cost,description, category_id,model, brand etc
 
             args: 
                 product: pydantic model
+                request: for extracting user's JWT token
                 db: session varibale for interactios with database
 
             """
@@ -58,6 +59,84 @@ class ProductRoutes():
                 success=True,
                 data = product,
                 msg="product created",
+            )
+        
+        @router.patch("/{id}", response_model= StandardResponse[ProductResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def update_product(id:UUID, product:ProductUpdateSchema , request:Request, db:Session = Depends(get_db)):
+            """update product with data of name, description,category_id,model, brand etc
+
+            args: 
+                product: pydantic model
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"PATCH :- /products/{id} endpoint called for updating product")
+            service = ProductService(db)
+            updated_product = service.update_product(id, product)
+            return StandardResponse(
+                success=True,
+                data = updated_product,
+                msg="product updated",
+            )
+        
+        @router.delete("/{id}", response_model= StandardResponse[ProductResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def update_product(id:UUID, request:Request, db:Session = Depends(get_db)):
+            """delete product by id
+
+            args: 
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"DELETE :- /products/{id} endpoint called for deleting product")
+            service = ProductService(db)
+            deleted_product = service.delete_product(id)
+            return StandardResponse(
+                success=True,
+                data = deleted_product,
+                msg="product deleted",
+            )
+        
+        @router.get("/{id}", response_model= StandardResponse[ProductResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def get_product(id:UUID, request:Request, db:Session = Depends(get_db)):
+            """get product by id
+
+            args: 
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"GET :- /products/{id} endpoint called for getting product")
+            service = ProductService(db)
+            product = service.get_product(id)
+            return StandardResponse(
+                success=True,
+                data = product,
+                msg="Product fetched",
+            )
+        
+
+        @router.get("", response_model= StandardResponse[ProductResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def get_product(request:Request, db:Session = Depends(get_db)):
+            """get all product 
+
+            args: 
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"GET :- /products/{id} endpoint called for getting product")
+            service = ProductService(db)
+            product = service.list_products(id)
+            return StandardResponse(
+                success=True,
+                data = product,
+                msg="Product fetched",
             )
         return router
 

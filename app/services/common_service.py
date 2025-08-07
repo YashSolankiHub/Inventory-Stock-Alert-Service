@@ -50,12 +50,13 @@ class CommonService():
             self.db.rollback()
             raise DataBaseError(e)
     
-    def delete_record_by_id(self, id):
+    def delete_record_by_id(self, id,schema:BaseModel):
         deleted_record = self.db.get(self.model,id)
         try:
+            data = schema.model_validate(deleted_record)
             self.db.delete(deleted_record)
             self.db.commit()
-            return deleted_record
+            return data
         except SQLAlchemyError as e:
             self.db.rollback()
             raise DataBaseError(e)

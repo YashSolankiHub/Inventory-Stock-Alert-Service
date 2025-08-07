@@ -52,6 +52,7 @@ class InventoryRoutes():
 
             args: 
                 inventory_item: pydantic model
+                request: for extracting user's JWT token
                 db: session varibale for interactios with database
 
             """

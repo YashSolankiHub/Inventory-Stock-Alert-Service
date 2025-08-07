@@ -55,6 +55,7 @@ class PORoutes():
 
             args: 
                 PurchaseOrder: pydantic model
+                request: for extracting user's JWT token
                 db: session varibale for interactios with database
 
             """
@@ -74,6 +75,7 @@ class PORoutes():
             args: 
                 id: purchase order id
                 PurchaseOrderStatus: pydantic model
+                request: for extracting user's JWT token
                 db: session varibale for interactios with database
             """
             logger.info(f"PATCH :- /purchase_orders/{id}/status endpoint called for updating Purchase Order status")
