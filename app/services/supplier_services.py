@@ -23,6 +23,7 @@ from app.utils.helper import generate_sku
 from app.models.warehouses import Warehouse as WarehouseModel
 from app.enums.enums import UserRoles
 from app.models.suppliers import Supplier as SupplierModel
+from app.services.filter_service import FilterService
 
 
 
@@ -31,10 +32,11 @@ import uuid
 logger = LoggingService(__name__).get_logger() 
 
 
-class SupplierService(CommonService):
+class SupplierService(CommonService, FilterService):
     def __init__(self, db:Session):
         self.db = db
         CommonService.__init__(self,db, SupplierModel)
+        FilterService.__init__(self, db, SupplierModel )
 
     def create_supplier(self,py_model:BaseModel):
         pydantic_data = py_model.model_dump()
@@ -80,6 +82,16 @@ class SupplierService(CommonService):
         logger.info(f"updating supplier with id: {id}")
 
         return updated_supplier
+    
+    def list_suppliers(self,py_model:BaseModel, allowed_fields):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"startting process of listing suppliers with filter data {pydantic_data}")
+
+        searched_filtered_data = self.apply_filter_sorting(py_model, allowed_fields, self.db)
+
+        return searched_filtered_data
+    
+
 
 
 

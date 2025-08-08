@@ -5,6 +5,7 @@ from app.enums.enums import FilterOperator
 from app.models.products import Product
 from app.models.warehouses import Warehouse
 from app.models.inventory_item import InventoryItem
+from app.models.suppliers import Supplier
 
 load_dotenv()
 
@@ -54,6 +55,10 @@ search_parameters = {
         'self' :["sku", "qty"],
         'relationships': {}
 
+    },
+    Supplier :{
+        'self' : ["name", "email", "mobile", "lead_time_days"],
+        'relationships': {}
     }
 
 

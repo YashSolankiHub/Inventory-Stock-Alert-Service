@@ -25,6 +25,8 @@ from app.schemas.warehouse import *
 from app.services.warehouse_services import WarehouseService
 from app.schemas.supplier import *
 from app.services.supplier_services import SupplierService
+from app.schemas.filter_search_ import *
+
 
 
 logger = LoggingService(__name__).get_logger()
@@ -105,6 +107,24 @@ class SupplierRoutes():
                 data= updated_supplier,
                 msg= "Supplier updated"
             )
+        
+        @router.get("", response_model= StandardResponse[List[SupplierResponseSchema]])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def list_suppliers(request:Request,filters: FilterSearchSchema= Depends(get_filter_param), db:Session = Depends(get_db)):
+            """get all suppliers 
+
+            args: 
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"GET :- /products endpoint called for getting product")
+            service = SupplierService(db)
+            allowed_fields = ["name", "email", "mobile", "lead_time_days"]
+            suppliers = service.list_suppliers(filters,allowed_fields)
+            return suppliers
+            
         return router
+
 
 
