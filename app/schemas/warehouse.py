@@ -32,5 +32,18 @@ class WarehouseResponseSchema(BaseModel):
         from_attributes = True
         arbitrary_types_allowed=True
 
+class WarehouseProductStockResponseSchema(BaseModel):
+    product_id:UUID
+    sku:str
+    qty:int
+    bin_id :UUID
+
+    class Config:
+        from_attributes = True
+        arbitrary_types_allowed=True
+
+
+
+
     
 

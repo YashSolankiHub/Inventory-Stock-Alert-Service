@@ -65,6 +65,8 @@ class InventoryRoutes():
                 data =inventory_item,
                 msg="Item added to inventory",
             )
+        
+        
         return router
             
 

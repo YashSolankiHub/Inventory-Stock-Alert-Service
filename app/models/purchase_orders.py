@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import  String, BIGINT,Integer,ForeignKey,Enum as SQLEnum, DateTime
+from sqlalchemy import  String, BIGINT,Integer,ForeignKey,Enum as SQLEnum, DateTime,func
 from app.db.base import Base
 from app.models.common_fields import CommonFieldsMixin
 from typing import List, TYPE_CHECKING
@@ -20,6 +20,7 @@ class PurchaseOrder(Base,CommonFieldsMixin):
     status:Mapped[PurchaseOrderStatus] = mapped_column(SQLEnum(PurchaseOrderStatus), default= PurchaseOrderStatus.DRAFT)
     warehouse_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('warehouses.id'))
     supplier_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('suppliers.id'))
+    status_updated_at:Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     po_items: Mapped[List["POItem"]] = relationship(back_populates="po")
 
     # supplier:Mapped["Supplier"] = relationship(back_populates="pos")

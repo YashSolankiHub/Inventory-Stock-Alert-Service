@@ -12,3 +12,7 @@ class NotFoundException(APIException):
 class PermissionDeniedException(APIException):
     def __init__(self, msg: str = "Permission denied"):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, code="ACCESS_DENIED",msg=msg)
+
+class BadRequestException(APIException):
+    def __init__(self, msg: str = "Bad request", code :str= "BAD_REQUEST"):
+        super().__init__(status_code=status.HTTP_400_BAD_REQUEST, code=code,msg=msg)

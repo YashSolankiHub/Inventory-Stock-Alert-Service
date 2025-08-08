@@ -68,7 +68,7 @@ class InventoryItemService(CommonService):
         
         if pydantic_data['qty'] > received_item_record.qty:
             logger.warning(f"Product with id {pydantic_data['product_id']} does not receive {pydantic_data['qty']}. Actual unit is : {received_item_record.qty}")
-            raise NotFoundException(f"Product with id {pydantic_data['product_id']} does not receive {pydantic_data['qty']} units. Actual unit is : {received_item_record.qty}")
+            raise BadRequestException(msg = f"Product with id {pydantic_data['product_id']} does not receive {pydantic_data['qty']} units. Actual unit is : {received_item_record.qty}", code = "EXPECTED_QUANTITY_EXCEEDS")
         
         bin_record = self.db.query(BinModel).filter_by(id = pydantic_data['bin_id'], warehouse_id = purchase_order_record.warehouse_id).first()
 

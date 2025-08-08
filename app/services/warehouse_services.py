@@ -22,6 +22,8 @@ from app.models.products import Product as ProductModel
 from app.utils.helper import generate_sku
 from app.models.warehouses import Warehouse as WarehouseModel
 from app.enums.enums import UserRoles
+from app.models.inventory_item import InventoryItem as InventoryItemModel
+from app.services.filter_service import FilterService
 
 
 
@@ -30,10 +32,11 @@ import uuid
 logger = LoggingService(__name__).get_logger() 
 
 
-class WarehouseService(CommonService):
+class WarehouseService(CommonService,FilterService):
     def __init__(self, db:Session):
         self.db = db
         CommonService.__init__(self,db, WarehouseModel)
+        FilterService.__init__(self, db, WarehouseModel)
 
     def create_warehouse(self,py_model:BaseModel):
         pydantic_data = py_model.model_dump()
@@ -55,6 +58,40 @@ class WarehouseService(CommonService):
         logger.info(f"Adding new warehouse: {pydantic_data}")
         warehouse = self.create_record(pydantic_data)
         return warehouse
+    
+    def get_product_stock_of_warehouse(self, id):
+        logger.info(f"Getting warehouse product stock with id: {id}")
+
+        warehouse_record = self.get_record_by_id(id)
+
+        #raise exception if warehouse record is not found
+        if not warehouse_record:
+            logger.warning(f"Warehouse with id {id} not exists")
+            raise NotFoundException(f"Warehouse with id {id} not exists")
+        
+        logger.info(f"warehouse with id: {id} found")
+        
+        warehouse_product_stocks = self.db.query(InventoryItemModel).filter_by(warehouse_id = id).all()
+
+
+
+
+
+
+        if not warehouse_product_stocks:
+            logger.warning(f"Warehouse with id {id} does not have any product stocks")
+            raise NotFoundException(f"Warehouse with id {id} does not have any product stocks")
+        
+        return warehouse_product_stocks
+
+
+
+
+
+
+
+
+        
         
 
 

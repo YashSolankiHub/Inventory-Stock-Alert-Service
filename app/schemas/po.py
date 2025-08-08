@@ -18,6 +18,7 @@ class POResponseSchema(BaseModel):
     id:UUID
     total_po_cost:int 
     status:str
+    status_updated_at:datetime
     expected_date:datetime.date
     supplier_id:UUID
     warehouse_id:UUID

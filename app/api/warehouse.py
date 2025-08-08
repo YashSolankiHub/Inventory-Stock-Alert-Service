@@ -61,16 +61,27 @@ class WarehouseRoutes():
                 data = warehouse,
                 msg="Warehouse created",
             )
+        
+
+        @router.get("/{id}/products_stock", response_model= StandardResponse[List[WarehouseProductStockResponseSchema]])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def get_product_stock_of_warehouse(id:UUID, request:Request, db:Session = Depends(get_db)):
+            """get all products of Warehouse  
+
+            args: 
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"GET :- /warehouses/{id}/products_stock endpoint called for getting all prodcuts stock in Warehouse")
+            service = WarehouseService(db)
+            warehouse_product_stocks = service.get_product_stock_of_warehouse(id)
+            return StandardResponse(
+                success=True,
+                data = warehouse_product_stocks,
+                msg="Warehouse's product stock fetched",
+            )
         return router
 
 
 
-
-            
-
-
-
-        
-
-
-        

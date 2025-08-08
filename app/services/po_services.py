@@ -89,7 +89,7 @@ class POService(CommonService):
         #raise exception if total_po_cost is 0 means no po item set with po
         elif not purchase_order_record.total_po_cost:
             logger.warning(f"Purchase Order with id {id} does not have any item to orderd! Please add items to PO")
-            raise NotFoundException(f"Purchase Order with id {id} does not have any item to order! Please add items to PO")
+            raise NoItemForPOException(f"Purchase Order with id {id} does not have any item to order! Please add items to PO")
         
         #raise exception if staus is same as request staus
         elif purchase_order_record.status == pydantic_data['status']:
@@ -106,7 +106,8 @@ class POService(CommonService):
             logger.warning(f"PO with {id} already ordered you can't change make it draft")
             raise InvalidStatusException(f"PO with {id} already ordered you can't change make it draft")
         
-                
+
+        purchase_order_record.status_updated_at = datetime.now(timezone.utc)
         status_updated_po = self.update_record_by_id(id, py_model)
         logger.info(f"po status updated: {status_updated_po}")
         
