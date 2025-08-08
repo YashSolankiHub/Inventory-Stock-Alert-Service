@@ -37,7 +37,7 @@ class CategoryRoutes():
             APIRouter: Configured router with category routes.
         """    
 
-        router = APIRouter(prefix="", tags=["category"])
+        router = APIRouter(prefix="", tags=["Category"])
 
         @router.post("/categories", response_model= StandardResponse[CategoryResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])

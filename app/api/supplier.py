@@ -40,6 +40,9 @@ class SupplierRoutes():
 
         This includes:
         - create supplier
+        - get supplier by id
+        - update supplier
+        - listing all suppliers
 
         Returns:
             APIRouter: Configured router with Supplier routes.

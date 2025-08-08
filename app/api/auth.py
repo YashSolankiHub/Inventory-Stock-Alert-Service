@@ -41,7 +41,7 @@ class AuthRoutes():
 
 
 
-        router = APIRouter(prefix="", tags=["auth"])
+        router = APIRouter(prefix="", tags=["Auth"])
         oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 

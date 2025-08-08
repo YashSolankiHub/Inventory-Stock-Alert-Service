@@ -44,7 +44,7 @@ class ProductRoutes():
             APIRouter: Configured router with product routes.
         """    
 
-        router = APIRouter(prefix="", tags=["product"])
+        router = APIRouter(prefix="", tags=["Product"])
 
 
         @router.post("/", response_model= StandardResponse[ProductResponseSchema])
