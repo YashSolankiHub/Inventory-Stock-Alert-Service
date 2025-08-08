@@ -33,3 +33,4 @@ class ProductUpdateSchema(BaseModel):
     description:str = Field(...,min_length=4)
     model:Optional[str] = None
     brand:str = Field(..., min_length=2)
+    threshold_qty:int = Field(...)

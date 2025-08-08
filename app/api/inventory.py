@@ -47,6 +47,7 @@ class InventoryRoutes():
         router = APIRouter(prefix="", tags=["Inventory"])
 
         @router.post("", response_model=StandardResponse[InventoryItemResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
         async def add_received_po_item_in_inventory(inventory_item :InventoryItemCreateSchema, db:Session= Depends(get_db)):
             """create inventory item with data of po item id,product id, qty, bin id etc
 
@@ -65,6 +66,30 @@ class InventoryRoutes():
                 data =inventory_item,
                 msg="Item added to inventory",
             )
+        
+        @router.get("/reports")
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def export_inventory_report(request:Request, warehouse_id: str = Query(None), db:Session = Depends(get_db)):
+            logger.info(f"GET :- /inventory_items/reports endpoint called for generating reports")
+            service = InventoryItemService(db)
+            generate_report_path = service.export_inventory_report(warehouse_id)
+
+            return StandardResponse(
+                success=True,
+                data= [],
+                msg= f"Report generated successfully and save to {generate_report_path}"
+
+
+            )
+
+
+
+
+
+
+
+        
+
         
         
         return router

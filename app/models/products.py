@@ -17,6 +17,8 @@ class Product(Base,CommonFieldsMixin):
     description:Mapped[str] = mapped_column(String(50))
     model:Mapped[str] = mapped_column(String(20), nullable=True)
     brand:Mapped[str] = mapped_column(String(20))
+    threshold_qty:Mapped[int] = mapped_column(Integer, nullable=True, default=0)
     category_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('categories.id'))
     category:Mapped["Category"] = relationship(back_populates="products")
+    
 

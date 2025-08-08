@@ -4,6 +4,8 @@ from app.utils.validators import PwdContext
 from fastapi import HTTPException, status, UploadFile
 from sqlalchemy import and_, or_, func
 from app.services.common_service import CommonService
+from openpyxl.styles import Alignment
+import os
 
 from app.models.users import User as UserModel
 from app.models.categories import Category as CategoryModel
@@ -30,6 +32,9 @@ from app.exceptions.purchase_order import *
 from app.models.received_po_item import ReceivedPOItem as ReceivedPOItemModel
 from app.models.purchase_orders import PurchaseOrder as PurchaseOrderModel
 from app.enums.enums import PurchaseOrderStatus
+from openpyxl import Workbook
+from io import BytesIO
+from fastapi.responses import StreamingResponse
 
 
 
@@ -107,5 +112,244 @@ class InventoryItemService(CommonService):
             self.db.rollback()
             raise DataBaseError(e)
         return inventory_item
+    
+
+    def export_inventory_report(self, warehouse_id=None):
+        logger.info("Start process for exporting inventory report")
+
+        product_records = self.db.query(InventoryItemModel)
+
+        if warehouse_id:
+            warehouse_record = self.db.query(WarehouseModel).filter_by(id = warehouse_id).first()
+            #raise exception if warehouse not exists
+            if not warehouse_record :
+                logger.warning(f"Warehouse with id  {warehouse_id} not exists!")
+                raise NotFoundException(f"Warehouse with id  {warehouse_id} not exists!")
+            
+            all_product_records = product_records.filter_by(warehouse_id=warehouse_id).all()
+            low_qty_product_records = (
+                product_records
+                .join(ProductModel)
+                .filter(
+                    InventoryItemModel.warehouse_id == warehouse_id,
+                    InventoryItemModel.qty < ProductModel.threshold_qty
+                )
+                .all()
+            )
+
+            if not all_product_records:
+                logger.warning(f"Warehouse with id {warehouse_id} does not have any product stocks")
+                raise NotFoundException(f"Warehouse with id {warehouse_id} does not have any product stocks")
+        else:
+            all_product_records = product_records.all()
+            low_qty_product_records = (
+                product_records
+                .join(ProductModel)
+                .filter(InventoryItemModel.qty < ProductModel.threshold_qty)
+                .all()
+            )
+
+            if not all_product_records:
+                logger.warning("No inventory records found")
+                raise NotFoundException("No inventory records found")
+
+        # excel worbook created
+        wb = Workbook()
+        current_ws = wb.active
+        current_ws.title = "Current Inventory"
+
+        #write headers
+        current_ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=5)
+        current_ws.cell(row=1, column=1).value = f"Warehouse ID: {warehouse_id or 'All Warehouses'}"
+        current_ws.cell(row=1, column=1).alignment = Alignment(horizontal="center")
+        current_ws.append(["Product ID", "SKU", "Warehouse ID", "Bin ID", "Qty"])
+
+        for item in all_product_records:
+            current_ws.append([
+                str(item.product_id),
+                item.sku,
+                str(item.warehouse_id),
+                str(item.bin_id),
+                item.qty,
+            ])
+
+        if low_qty_product_records:
+            low_stock_ws = wb.create_sheet("Low Stock Items")
+            low_stock_ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=5)
+            low_stock_ws.cell(row=1, column=1).value = f"Warehouse ID: {warehouse_id or 'All Warehouses'}"
+            low_stock_ws.cell(row=1, column=1).alignment = Alignment(horizontal="center")
+            low_stock_ws.append(["Product ID", "SKU", "Warehouse ID", "Bin ID", "Qty"])
+
+            for item in low_qty_product_records:
+                low_stock_ws.append([
+                    str(item.product_id),
+                    item.sku,
+                    str(item.warehouse_id),
+                    str(item.bin_id),
+                    item.qty,
+                ])
+
+
+        reports_dir = "reports"
+        os.makedirs(reports_dir, exist_ok=True)
+
+        filename = f"{uuid.uuid4()}_inventory_report_{warehouse_id or 'all'}.xlsx"
+        file_path = os.path.join(reports_dir, filename)
+
+        wb.save(file_path)
+
+        return file_path
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # def export_inventory_report(self, warehouse_id):
+    #     logger.info(f"start process for exportin reports")
+
+    #     product_records = self.db.query(InventoryItemModel)
+
+    #     if warehouse_id:
+    #         all_product_records = product_records.filter_by(warehouse_id = warehouse_id).all()
+
+    #         low_qty_product_records = product_records.join(ProductModel).filter(InventoryItemModel.qty < ProductModel.threshold_qty).all()
+
+    #         if not all_product_records:
+    #             logger.warning(f"Warhouse with id {warehouse_id} does not have any product stocks")
+    #             raise NotFoundException(f"Warhouse with id {warehouse_id} does not have any product stocks")
+            
+    #         wb = Workbook()
+    #         current_ws = wb.active
+    #         current_ws.title = "Current Inventory"
+
+    #         if low_qty_product_records:
+    #             low_stock_ws = wb.create_sheet("Low Stock Items")
+    #             low_stock_ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=5)
+    #             low_stock_ws.cell(row=1, column=1).value = f"Warehouse ID: {warehouse_id or 'All Warehouses'}"
+    #             low_stock_ws.cell(row=1, column=1).alignment = Alignment(horizontal="center")
+    #             low_stock_ws.append(["Product ID", "SKU", "Warehouse ID", "Bin ID", "Qty"])
+
+    #             for item in low_qty_product_records:
+    #                 low_stock_ws.append([
+    #                     str(item.product_id),
+    #                     item.sku,
+    #                     str(item.warehouse_id),
+    #                     str(item.bin_id),
+    #                     item.qty,
+    #                 ])
+
+    #         current_ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=5)
+    #         current_ws.cell(row=1, column=1).value = f"Warehouse ID: {warehouse_id}"
+    #         current_ws.cell(row=1, column=1).alignment = Alignment(horizontal="center")
+    #         current_ws.append(["Product ID", "SKU", "Warehouse ID", "Bin ID", "Qty"])
+    #         for item in all_product_records:
+    #             current_ws.append([
+    #                 str(item.product_id),
+    #                 item.sku,
+    #                 str(item.warehouse_id),
+    #                 str(item.bin_id),
+    #                 item.qty,
+    #             ])
+            
+    #         # Write to memory
+    #         stream = BytesIO()
+    #         wb.save(stream)
+    #         stream.seek(0)
+
+    #         reports_dir = "reports"
+    #         os.makedirs(reports_dir, exist_ok=True)
+
+    #         file_path = os.path.join(reports_dir, f"{uuid.uuid4()}_inventory_report_{warehouse_id}.xlsx")
+    #         wb.save(file_path)
+
+    #     return file_path
+
+
+
+
+
+
+        
+
+        
+
+
+
     
 

@@ -6,5 +6,5 @@ fastapi[standard]
 passlib[bycript]
 pyjwt
 jose
-
+openpyxl
 
