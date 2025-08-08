@@ -22,7 +22,6 @@ class ProductResponseSchema(BaseModel):
     category:CategoryResponseSchema
 
 
-
     class Config:
         from_attributes = True
         arbitrary_types_allowed=True

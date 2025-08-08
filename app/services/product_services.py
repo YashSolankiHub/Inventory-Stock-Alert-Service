@@ -21,6 +21,7 @@ from app.exceptions.common import *
 from app.models.products import Product as ProductModel
 from app.utils.helper import generate_sku
 from app.schemas.product import *
+from app.services.filter_service import FilterService
 
 
 
@@ -29,11 +30,11 @@ import uuid
 logger = LoggingService(__name__).get_logger() 
 
 
-class ProductService(CommonService):
+class ProductService(CommonService,FilterService):
     def __init__(self,db:Session):
         self.db = db
         CommonService.__init__(self,db, ProductModel)
-        # FilterService.__init__(db, CategoryModel)
+        FilterService.__init__(self,db, ProductModel)
 
     def create_product(self, py_model:BaseModel):
         pydantic_data = py_model.model_dump()
@@ -128,8 +129,14 @@ class ProductService(CommonService):
 
         return deleted_product
     
-    def list_products(self):
-        pass
+    def list_products(self,py_model:BaseModel, allowed_fields):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"startting process of listing product with filter data {pydantic_data}")
+
+        searched_filtered_data = self.apply_filter_sorting(py_model, allowed_fields, self.db)
+
+        return searched_filtered_data
+
 
 
 

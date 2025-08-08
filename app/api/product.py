@@ -21,6 +21,7 @@ from app.schemas.categories import *
 from app.services.category_services import CategoryService
 from app.schemas.product import *
 from app.services.product_services import ProductService
+from app.schemas.filter_search_ import *
 
 logger = LoggingService(__name__).get_logger()
 
@@ -119,10 +120,9 @@ class ProductRoutes():
                 msg="Product fetched",
             )
         
-
-        @router.get("", response_model= StandardResponse[ProductResponseSchema])
+        @router.get("", response_model= StandardResponse[List[ProductResponseSchema]])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def get_product(request:Request, db:Session = Depends(get_db)):
+        async def list_products(request:Request,filters: FilterSearchSchema= Depends(get_filter_param), db:Session = Depends(get_db)):
             """get all product 
 
             args: 
@@ -130,14 +130,12 @@ class ProductRoutes():
                 db: session varibale for interactios with database
 
             """
-            logger.info(f"GET :- /products/{id} endpoint called for getting product")
+            logger.info(f"GET :- /products endpoint called for getting product")
             service = ProductService(db)
-            product = service.list_products(id)
-            return StandardResponse(
-                success=True,
-                data = product,
-                msg="Product fetched",
-            )
+            allowed_fields = ["name", "sku", "brand", "model","description"]
+            products = service.list_products(filters,allowed_fields)
+            return products
+            
         return router
 
 
