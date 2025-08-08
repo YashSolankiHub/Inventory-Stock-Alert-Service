@@ -42,7 +42,6 @@ class SupplierRoutes():
         Returns:
             APIRouter: Configured router with Supplier routes.
         """    
-
         router = APIRouter(prefix="", tags=["Supplier"])
 
 
@@ -65,16 +64,47 @@ class SupplierRoutes():
                 data = supplier,
                 msg="Supplier created",
             )
+        
+        @router.get("/{id}", response_model=StandardResponse[SupplierResponseSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def get_supplier_by_id(id:UUID , request:Request, db:Session = Depends(get_db)):
+            """get  Supplierby id 
+
+            args: 
+                id: expect supllier id
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"GET :- /suppliers/{id} endpoint called for getting Supplier")
+            service = SupplierService(db)
+            supplier = service.get_supplier_by_id(id)
+
+            return StandardResponse(
+                success= True,
+                data= supplier,
+                msg= "Supplier Fetched"
+            )
+        @router.patch("/{id}", response_model= StandardResponse[SupplierUpdateSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def update_supplier(id:UUID, supplier:SupplierUpdateSchema , request:Request, db:Session = Depends(get_db)):
+            """update supplier with data of name, email, mobile, lead_time_days 
+
+            args: 
+                id: expect supplier id
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"PATCH :- /suppliers/{id} endpoint called for updating supplier")
+            service = SupplierService(db)
+            updated_supplier = service.update_supplier(id,supplier)
+
+            return StandardResponse(
+                success= True,
+                data= updated_supplier,
+                msg= "Supplier updated"
+            )
         return router
 
 
-
-
-            
-
-
-
-        
-
-
-        

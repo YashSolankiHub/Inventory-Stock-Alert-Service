@@ -53,6 +53,38 @@ class SupplierService(CommonService):
         logger.info(f"Adding new supplier: {pydantic_data}")
         supplier = self.create_record(pydantic_data)
         return supplier
+    
+    def get_supplier_by_id(self, id):
+        logger.info(f"getting supplier with id :{id}")
+
+        supplier_record = self.get_record_by_id(id)
+
+        if not supplier_record:
+            logger.warning(f"Suplier with id {id} not exists")
+            raise NotFoundException(f"Suplier with id {id} not exists")
+        
+        return supplier_record
+    
+    def update_supplier(self, id, py_model:BaseModel):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"updating supplier with data: {pydantic_data}")
+
+        supplier_record = self.get_record_by_id(id)
+
+        #raise exception if supplier not found
+        if not supplier_record:
+            logger.warning(f"supplier with id {id} not found!")
+            raise NotFoundException(f"supplier with id {id} not found!")
+
+        updated_supplier = self.update_record_by_id(id,py_model)
+        logger.info(f"updating supplier with id: {id}")
+
+        return updated_supplier
+
+
+
+
+
         
         
 
