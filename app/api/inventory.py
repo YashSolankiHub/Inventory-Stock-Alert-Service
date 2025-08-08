@@ -39,7 +39,9 @@ class InventoryRoutes():
         Create and return an APIRouter with all inventory-related endpoints.
 
         This includes:
-        
+        - add receive po item in the inventory
+        - generate inventory reports
+        - listing all inventiry items
 
         Returns:
             APIRouter: Configured router with inventory routes.

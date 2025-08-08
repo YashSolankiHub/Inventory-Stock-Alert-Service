@@ -36,6 +36,7 @@ class BinRoutes():
         Create and return an APIRouter with all Bin-related endpoints.
 
         This includes:
+        - create bin
         
 
         Returns:

@@ -36,6 +36,11 @@ class WarehouseRoutes():
         Create and return an APIRouter with all Warehouse-related endpoints.
 
         This includes:
+        - create warehouse
+        - get stock of particular warehouse by id
+        - get warehouse by id
+        - delete warehouse by id
+        - listing all warehouse
         
 
         Returns:

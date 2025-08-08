@@ -37,7 +37,7 @@ class SupplierRoutes():
         Create and return an APIRouter with all Supplier-related endpoints.
 
         This includes:
-        
+        - create supplier
 
         Returns:
             APIRouter: Configured router with Supplier routes.

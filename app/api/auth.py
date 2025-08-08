@@ -27,6 +27,12 @@ class AuthRoutes():
         Create and return an APIRouter with all auth-related endpoints.
 
         This includes:
+        - register admin
+        - register warehouse
+        - register clerk
+        - login
+
+
         
 
         Returns:

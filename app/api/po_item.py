@@ -41,6 +41,8 @@ class POItemRoutes():
         Create and return an APIRouter with all POItem-related endpoints.
 
         This includes:
+        - create purchase order items
+        - delete purchase order item by id
         
 
         Returns:

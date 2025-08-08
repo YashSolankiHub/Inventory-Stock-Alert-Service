@@ -39,7 +39,8 @@ class PORoutes():
         Create and return an APIRouter with all PO-related endpoints.
 
         This includes:
-        
+        - create purchase order
+        - change purchase status
 
         Returns:
             APIRouter: Configured router with PO routes.

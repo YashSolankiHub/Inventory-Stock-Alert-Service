@@ -33,6 +33,11 @@ class ProductRoutes():
         Create and return an APIRouter with all product-related endpoints.
 
         This includes:
+        - create product
+        - update product
+        - delete product
+        - get product by id
+        - listing all products
         
 
         Returns:

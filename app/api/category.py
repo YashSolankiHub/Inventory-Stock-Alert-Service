@@ -30,6 +30,7 @@ class CategoryRoutes():
         Create and return an APIRouter with all catogory-related endpoints.
 
         This includes:
+        - create category
         
 
         Returns:
