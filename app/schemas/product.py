@@ -34,3 +34,10 @@ class ProductUpdateSchema(BaseModel):
     model:Optional[str] = None
     brand:str = Field(..., min_length=2)
     threshold_qty:int = Field(...)
+
+
+class StockTransferSchema(BaseModel):
+    from_warehouse_id: UUID = Field(...)
+    product_id: UUID = Field(...)
+    to_warehouse_id: UUID = Field(...)
+    qty: int = Field(...)

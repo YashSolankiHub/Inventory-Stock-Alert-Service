@@ -17,7 +17,7 @@ from app.exceptions.base import APIException
 app = FastAPI(title="Online Learning Platform")
 
 app.include_router(AuthRoutes.get_router(),prefix="/auth")
-app.include_router(UsersRoutes.get_router(),prefix="/users")
+# app.include_router(UsersRoutes.get_router(),prefix="/users")
 app.include_router(CategoryRoutes.get_router(),prefix="")
 app.include_router(ProductRoutes.get_router(),prefix="/products")
 app.include_router(WarehouseRoutes.get_router(),prefix="/warehouses")

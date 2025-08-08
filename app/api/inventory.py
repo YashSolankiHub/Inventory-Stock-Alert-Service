@@ -49,7 +49,7 @@ class InventoryRoutes():
         @router.post("", response_model=StandardResponse[InventoryItemResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
         async def add_received_po_item_in_inventory(inventory_item :InventoryItemCreateSchema, db:Session= Depends(get_db)):
-            """create inventory item with data of po item id,product id, qty, bin id etc
+            """add inventory item with data of po item id,product id, qty, bin id etc
 
             args: 
                 inventory_item: pydantic model
@@ -67,9 +67,19 @@ class InventoryRoutes():
                 msg="Item added to inventory",
             )
         
+        @router.post
+
         @router.get("/reports")
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
         async def export_inventory_report(request:Request, warehouse_id: str = Query(None), db:Session = Depends(get_db)):
+            """export invenroty report
+
+            args: 
+                warehouse_id: query param
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
             logger.info(f"GET :- /inventory_items/reports endpoint called for generating reports")
             service = InventoryItemService(db)
             generate_report_path = service.export_inventory_report(warehouse_id)
@@ -78,9 +88,25 @@ class InventoryRoutes():
                 success=True,
                 data= [],
                 msg= f"Report generated successfully and save to {generate_report_path}"
-
-
             )
+
+        @router.post("/transfer", response_model=StandardResponse)
+        async def transfer_stock_between_warehouse(stock_transfer:StockTransferSchema,request:Request, db:Session = Depends(get_db)):
+            """transfer inventory item from one warehouse to another warehouse
+
+            args: 
+                inventory_item: pydantic model
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"POST :- /inventory_items/transfer endpoint called for transfering item")
+            service = InventoryItemService(db)
+            service.transfer_stock_between_warehouse(stock_transfer)
+            
+
+
+
 
 
 

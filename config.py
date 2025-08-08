@@ -17,6 +17,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # algorithm to be used for encryption or decryption
 ALGORITHM = "HS256"
 
+#email password
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 1200
 REFRESH_TOKEN_EXPIRE_DAYS = 15

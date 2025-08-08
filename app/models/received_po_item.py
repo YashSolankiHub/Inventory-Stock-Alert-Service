@@ -11,10 +11,12 @@ if TYPE_CHECKING:
 
 
 class ReceivedPOItem(Base,CommonFieldsMixin):
-    __tablename__ = "received_po_items"
+    __tablename__ = "received_po__items_or_from_warehouse"
     product_id:Mapped[uuid.UUID]= mapped_column(UUID(as_uuid=True), ForeignKey('products.id'))
     sku:Mapped[str] = mapped_column(String(50))
     qty:Mapped[int] = mapped_column(Integer, default=0)
-    po_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('purchase_orders.id'))
+    po_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('purchase_orders.id'), nullable=True, )
+    from_warehouse_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('warehouses.id'),nullable=True,)
+    to_warehouse_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('warehouses.id'),nullable=True)
 
 

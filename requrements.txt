@@ -7,4 +7,5 @@ passlib[bycript]
 pyjwt
 jose
 openpyxl
-
+celery
+redis

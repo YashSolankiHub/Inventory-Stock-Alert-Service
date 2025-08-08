@@ -114,6 +114,26 @@ class InventoryItemService(CommonService):
         return inventory_item
     
 
+    def transfer_stock_between_warehouse(self, py_model:BaseModel):
+        logger.info("Start process for transfering stock")
+        pydantic_data = py_model.model_dump()
+        logger.info(f"Received data for transfering : {pydantic_data}")
+
+        warehouse_record = self.db.get(WarehouseModel, pydantic_data['from_warehouse_id'])
+
+        #raise exception if warehouse not found
+        if not warehouse_record:
+            logger.warning(f"warehouse with id {pydantic_data['from_warehouse_id']} not exists")
+            raise FileNotFoundError(f"warehouse with id {pydantic_data['from_warehouse_id']} not exists")
+        
+        product_record = self.db.get(InventoryItemModel, pydantic_data['product_id'])
+
+        if not product_record:
+            logger.warning(f"Product with id {pydantic_data['product_id']}not exists")
+            raise FileNotFoundError(f"Product with id {pydantic_data['product_id']}not exists")
+        
+
+
     def export_inventory_report(self, warehouse_id=None):
         logger.info("Start process for exporting inventory report")
 
