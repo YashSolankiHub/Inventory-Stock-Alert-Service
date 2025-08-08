@@ -14,4 +14,4 @@ celery_app.autodiscover_tasks([
 ])
 
 
-from app.services.celery_tasks import mail_daily_inventory_summary
+from app.services.celery_tasks import mail_summary
