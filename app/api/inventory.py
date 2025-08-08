@@ -27,6 +27,7 @@ from app.services.bin_service import BinService
 from app.schemas.bin import *
 from app.schemas.inventory_item import *
 from app.services.inventory_item import InventoryItemService
+from app.schemas.filter_search_ import *
 
 logger = LoggingService(__name__).get_logger()
 
@@ -89,6 +90,24 @@ class InventoryRoutes():
                 data= [],
                 msg= f"Report generated successfully and save to {generate_report_path}"
             )
+        
+
+
+        @router.get("", response_model= StandardResponse[List[InventoryItemResponseSchema]])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def list_inventory(request:Request,filters: FilterSearchSchema= Depends(get_filter_param), db:Session = Depends(get_db)):
+            """get all product 
+
+            args: 
+                request: for extracting user's JWT token for validating if user has acces to this api or not
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"GET :- /inventory_items endpoint called for getting inventory item")
+            service = InventoryItemService(db)
+            allowed_fields = ["sku", "qty"]
+            inventory_items = service.list_inventory_items(filters,allowed_fields)
+            return inventory_items
 
         # @router.post("/transfer", response_model=StandardResponse)
         # async def transfer_stock_between_warehouse(stock_transfer:StockTransferSchema,request:Request, db:Session = Depends(get_db)):

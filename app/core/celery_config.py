@@ -12,7 +12,7 @@ enable_utc = True
 
 
 beat_schedule = {
-    'send-mail-weekly': {
+    'generate-daily-report': {
         'task': 'app.services.celery_tasks.mail_daily_inventory_summary.mail_daily_inventory_summary',
         'schedule': crontab(hour=22, minute=0),   #daily at 10 pm
         # 'schedule':60.0

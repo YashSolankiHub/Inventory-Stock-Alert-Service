@@ -35,6 +35,7 @@ from app.enums.enums import PurchaseOrderStatus
 from openpyxl import Workbook
 from io import BytesIO
 from fastapi.responses import StreamingResponse
+from app.services.filter_service import FilterService
 
 
 
@@ -43,10 +44,11 @@ import uuid
 logger = LoggingService(__name__).get_logger() 
 
 
-class InventoryItemService(CommonService):
+class InventoryItemService(CommonService, FilterService):
     def __init__(self, db:Session):
         self.db = db
         CommonService.__init__(self,db, InventoryItemModel)
+        FilterService.__init__(self, db,InventoryItemModel )
 
     def add_item_in_inventory(self,py_model:BaseModel):
         pydantic_data = py_model.model_dump()
@@ -219,6 +221,17 @@ class InventoryItemService(CommonService):
         wb.save(file_path)
 
         return file_path
+
+
+    def list_inventory_items(self,py_model:BaseModel, allowed_fields):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"startting process of listing inventory items with filter data {pydantic_data}")
+
+        searched_filtered_data = self.apply_filter_sorting(py_model, allowed_fields, self.db)
+
+        return searched_filtered_data
+
+
 
     
     

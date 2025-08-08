@@ -4,6 +4,7 @@ import operator
 from app.enums.enums import FilterOperator
 from app.models.products import Product
 from app.models.warehouses import Warehouse
+from app.models.inventory_item import InventoryItem
 
 load_dotenv()
 
@@ -48,7 +49,12 @@ search_parameters = {
         'relationships': {
             'bins' : ["name", "max_units", "current_stock_units", "available_units"]
         }
+    },
+    InventoryItem :{
+        'self' :["sku", "qty"],
+        'relationships': {}
+
     }
 
-    
+
     }
