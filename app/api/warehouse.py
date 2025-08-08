@@ -146,6 +146,27 @@ class WarehouseRoutes():
             allowed_fields = ["name", "address", "max_bins", "current_bins","available_bins"]
             warehouses = service.list_warehouse(filters,allowed_fields)
             return warehouses
+        
+        @router.patch("/{id}", response_model= StandardResponse[WarehouseUpdateSchema])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        async def update_warehouse(id:UUID, warehouse:WarehouseUpdateSchema , request:Request, db:Session = Depends(get_db)):
+            """update warehiuse with data of name, address
+
+            args: 
+                id: expect warehouse id
+                request: for extracting user's JWT token
+                db: session varibale for interactios with database
+
+            """
+            logger.info(f"PATCH :- /suppliers/{id} endpoint called for updating supplier")
+            service = WarehouseService(db)
+            updated_warehouse = service.update_warehouse(id,warehouse)
+
+            return StandardResponse(
+                success= True,
+                data= updated_warehouse,
+                msg= "warehouse updated"
+            )
 
 
 

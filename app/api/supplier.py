@@ -90,9 +90,9 @@ class SupplierRoutes():
                 data= supplier,
                 msg= "Supplier Fetched"
             )
-        @router.patch("/{id}", response_model= StandardResponse[SupplierUpdateSchema])
+        @router.patch("/{id}", response_model= StandardResponse[SupplierCreateSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def update_supplier(id:UUID, supplier:SupplierUpdateSchema , request:Request, db:Session = Depends(get_db)):
+        async def update_supplier(id:UUID, supplier:SupplierCreateSchema , request:Request, db:Session = Depends(get_db)):
             """update supplier with data of name, email, mobile, lead_time_days 
 
             args: 

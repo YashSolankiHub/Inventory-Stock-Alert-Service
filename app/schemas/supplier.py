@@ -24,10 +24,10 @@ class SupplierResponseSchema(BaseModel):
 
 
 
-class SupplierUpdateSchema(BaseModel):
-    name:str = Field(...,min_length=2)
-    email:EmailStr
-    mobile:int = Field(...)
-    lead_time_days:int = Field
+# class SupplierUpdateSchema(BaseModel):
+#     name:str = Field(...,min_length=2)
+#     email:EmailStr
+#     mobile:int = Field(...)
+#     lead_time_days:int = Field
 
 

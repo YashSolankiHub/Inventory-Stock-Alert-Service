@@ -115,6 +115,22 @@ class WarehouseService(CommonService,FilterService):
         searched_filtered_data = self.apply_filter_sorting(py_model, allowed_fields, self.db)
 
         return searched_filtered_data
+    
+    def update_warehouse(self, id, py_model:BaseModel):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"updating warehouse with data: {pydantic_data}")
+
+        warehouse_record = self.get_record_by_id(id)
+
+        #raise exception if supplier not found
+        if not warehouse_record:
+            logger.warning(f"warehouse with id {id} not found!")
+            raise NotFoundException(f"warehouse with id {id} not found!")
+
+        updated_warehouse = self.update_record_by_id(id,py_model)
+        logger.info(f"updating warehouse with id: {id}")
+
+        return updated_warehouse
 
 
 

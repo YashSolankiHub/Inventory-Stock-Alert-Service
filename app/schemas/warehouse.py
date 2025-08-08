@@ -42,7 +42,9 @@ class WarehouseProductStockResponseSchema(BaseModel):
         from_attributes = True
         arbitrary_types_allowed=True
 
-
+class WarehouseUpdateSchema(BaseModel):
+    name:str = Field(..., min_length=2)
+    address:str = Field(..., min_length=2)
 
 
     
