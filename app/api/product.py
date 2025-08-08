@@ -84,7 +84,7 @@ class ProductRoutes():
         
         @router.delete("/{id}", response_model= StandardResponse[ProductResponseSchema])
         @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
-        async def update_product(id:UUID, request:Request, db:Session = Depends(get_db)):
+        async def delete_product(id:UUID, request:Request, db:Session = Depends(get_db)):
             """delete product by id
 
             args: 
@@ -107,6 +107,7 @@ class ProductRoutes():
             """get product by id
 
             args: 
+                id:expect product id  
                 request: for extracting user's JWT token
                 db: session varibale for interactios with database
 

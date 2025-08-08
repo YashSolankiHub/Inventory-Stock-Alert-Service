@@ -24,6 +24,7 @@ from app.models.warehouses import Warehouse as WarehouseModel
 from app.enums.enums import UserRoles
 from app.models.inventory_item import InventoryItem as InventoryItemModel
 from app.services.filter_service import FilterService
+from app.schemas.warehouse import *
 
 
 
@@ -74,16 +75,46 @@ class WarehouseService(CommonService,FilterService):
         warehouse_product_stocks = self.db.query(InventoryItemModel).filter_by(warehouse_id = id).all()
 
 
-
-
-
-
         if not warehouse_product_stocks:
             logger.warning(f"Warehouse with id {id} does not have any product stocks")
             raise NotFoundException(f"Warehouse with id {id} does not have any product stocks")
         
         return warehouse_product_stocks
+    
+    def get_warehouse_by_id(self, id):
+        logger.info(f"getting warehouse with id: {id}")
+        
+        warehouse_record = self.get_record_by_id(id)
+        #raise exception if product not found
+        if not warehouse_record:
+            logger.warning(f"warehouse with id {id} not found!")
+            raise NotFoundException(f"Warehouse with id {id} not found!")
+        
+        return warehouse_record
 
+
+    def delete_warehouse(self, id):
+        logger.info(f"deleting warehouse with id: {id}")
+
+        warehouse_record = self.get_record_by_id(id)
+
+        #raise exception if product not found
+        if not warehouse_record:
+            logger.warning(f"warehouse with id {id} not found!")
+            raise NotFoundException(f"warehouse with id {id} not found!")
+        
+        deleted_warehouse = self.delete_record_by_id(id, WarehouseResponseSchema)
+        logger.info(f"deleting warehouse with id: {id}")
+
+        return deleted_warehouse
+    
+    def list_warehouse(self,py_model:BaseModel, allowed_fields):
+        pydantic_data = py_model.model_dump()
+        logger.info(f"startting process of listing warehouse with filter data {pydantic_data}")
+
+        searched_filtered_data = self.apply_filter_sorting(py_model, allowed_fields, self.db)
+
+        return searched_filtered_data
 
 
 

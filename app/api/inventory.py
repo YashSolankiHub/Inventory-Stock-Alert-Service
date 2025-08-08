@@ -90,20 +90,20 @@ class InventoryRoutes():
                 msg= f"Report generated successfully and save to {generate_report_path}"
             )
 
-        @router.post("/transfer", response_model=StandardResponse)
-        async def transfer_stock_between_warehouse(stock_transfer:StockTransferSchema,request:Request, db:Session = Depends(get_db)):
-            """transfer inventory item from one warehouse to another warehouse
+        # @router.post("/transfer", response_model=StandardResponse)
+        # async def transfer_stock_between_warehouse(stock_transfer:StockTransferSchema,request:Request, db:Session = Depends(get_db)):
+        #     """transfer inventory item from one warehouse to another warehouse
 
-            args: 
-                inventory_item: pydantic model
-                request: for extracting user's JWT token
-                db: session varibale for interactios with database
+        #     args: 
+        #         inventory_item: pydantic model
+        #         request: for extracting user's JWT token
+        #         db: session varibale for interactios with database
 
-            """
-            logger.info(f"POST :- /inventory_items/transfer endpoint called for transfering item")
-            service = InventoryItemService(db)
-            service.transfer_stock_between_warehouse(stock_transfer)
-            
+        #     """
+        #     logger.info(f"POST :- /inventory_items/transfer endpoint called for transfering item")
+        #     service = InventoryItemService(db)
+        #     service.transfer_stock_between_warehouse(stock_transfer)
+
 
 
 

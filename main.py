@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from app.api.auth import AuthRoutes
-from app.api.users import UsersRoutes
+# from app.api.users import UsersRoutes
 from app.api.category import CategoryRoutes
 from app.api.product import ProductRoutes
 from app.api.warehouse import WarehouseRoutes

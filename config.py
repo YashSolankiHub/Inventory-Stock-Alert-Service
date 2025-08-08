@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import operator
 from app.enums.enums import FilterOperator
 from app.models.products import Product
+from app.models.warehouses import Warehouse
 
 load_dotenv()
 
@@ -41,4 +42,13 @@ search_parameters = {
         'relationships': {
             'category':['name']
         }
-    },}
+    },
+    Warehouse :{
+        'self' : ["name", "address", "max_bins", "current_bins","available_bins"],
+        'relationships': {
+            'bins' : ["name", "max_units", "current_stock_units", "available_units"]
+        }
+    }
+
+    
+    }

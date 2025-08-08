@@ -51,9 +51,9 @@ class POItemRoutes():
 
 
         @router.post("/purchase_order_items", response_model= StandardResponse[POItemResponseSchema])
-        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER])
+        @required_roles([UserRoles.ADMIN, UserRoles.WAREHOUSE_MANAGER, UserRoles.CLERK])
         async def create_purchase_order_item(purchase_order_item:POItemCreateSchema , request:Request, db:Session = Depends(get_db)):
-            """create Purchase order item  with data of sku, 
+            """create Purchase order item  with data of sku, producr_id
 
             args: 
                 PurchaseOrderIitem: pydantic model
